@@ -1,0 +1,290 @@
+[
+  {
+    "id": "P001",
+    "name": "Thibaut Courtois",
+    "position": "GK",
+    "attack": 18,
+    "midfield": 25,
+    "defense": 92,
+    "overall": 90
+  },
+  {
+    "id": "P002",
+    "name": "Alisson Becker",
+    "position": "GK",
+    "attack": 22,
+    "midfield": 32,
+    "defense": 90,
+    "overall": 89
+  },
+  {
+    "id": "P003",
+    "name": "Manuel Neuer",
+    "position": "GK",
+    "attack": 25,
+    "midfield": 40,
+    "defense": 88,
+    "overall": 88
+  },
+  {
+    "id": "P004",
+    "name": "Emiliano Martinez",
+    "position": "GK",
+    "attack": 19,
+    "midfield": 28,
+    "defense": 89,
+    "overall": 87
+  },
+  {
+    "id": "P005",
+    "name": "Ederson Moraes",
+    "position": "GK",
+    "attack": 26,
+    "midfield": 45,
+    "defense": 87,
+    "overall": 88
+  },
+  {
+    "id": "P006",
+    "name": "Virgil van Dijk",
+    "position": "DEF",
+    "attack": 42,
+    "midfield": 65,
+    "defense": 93,
+    "overall": 91
+  },
+  {
+    "id": "P007",
+    "name": "Ruben Dias",
+    "position": "DEF",
+    "attack": 35,
+    "midfield": 60,
+    "defense": 91,
+    "overall": 89
+  },
+  {
+    "id": "P008",
+    "name": "William Saliba",
+    "position": "DEF",
+    "attack": 38,
+    "midfield": 62,
+    "defense": 90,
+    "overall": 88
+  },
+  {
+    "id": "P009",
+    "name": "Antonio Rudiger",
+    "position": "DEF",
+    "attack": 45,
+    "midfield": 58,
+    "defense": 89,
+    "overall": 88
+  },
+  {
+    "id": "P010",
+    "name": "Alphonso Davies",
+    "position": "DEF",
+    "attack": 72,
+    "midfield": 74,
+    "defense": 82,
+    "overall": 85
+  },
+  {
+    "id": "P011",
+    "name": "Kyle Walker",
+    "position": "DEF",
+    "attack": 60,
+    "midfield": 66,
+    "defense": 85,
+    "overall": 84
+  },
+  {
+    "id": "P012",
+    "name": "Marquinhos",
+    "position": "DEF",
+    "attack": 40,
+    "midfield": 64,
+    "defense": 88,
+    "overall": 87
+  },
+  {
+    "id": "P013",
+    "name": "Alessandro Bastoni",
+    "position": "DEF",
+    "attack": 46,
+    "midfield": 70,
+    "defense": 87,
+    "overall": 86
+  },
+  {
+    "id": "P014",
+    "name": "Kevin De Bruyne",
+    "position": "MID",
+    "attack": 86,
+    "midfield": 94,
+    "defense": 65,
+    "overall": 91
+  },
+  {
+    "id": "P015",
+    "name": "Jude Bellingham",
+    "position": "MID",
+    "attack": 87,
+    "midfield": 91,
+    "defense": 78,
+    "overall": 90
+  },
+  {
+    "id": "P016",
+    "name": "Rodri Hernandez",
+    "position": "MID",
+    "attack": 76,
+    "midfield": 93,
+    "defense": 89,
+    "overall": 91
+  },
+  {
+    "id": "P017",
+    "name": "Luka Modric",
+    "position": "MID",
+    "attack": 75,
+    "midfield": 89,
+    "defense": 70,
+    "overall": 87
+  },
+  {
+    "id": "P018",
+    "name": "Pedri Gonzalez",
+    "position": "MID",
+    "attack": 78,
+    "midfield": 90,
+    "defense": 68,
+    "overall": 86
+  },
+  {
+    "id": "P019",
+    "name": "Federico Valverde",
+    "position": "MID",
+    "attack": 82,
+    "midfield": 89,
+    "defense": 80,
+    "overall": 88
+  },
+  {
+    "id": "P020",
+    "name": "Declan Rice",
+    "position": "MID",
+    "attack": 70,
+    "midfield": 87,
+    "defense": 86,
+    "overall": 87
+  },
+  {
+    "id": "P021",
+    "name": "Martin Odegaard",
+    "position": "MID",
+    "attack": 83,
+    "midfield": 90,
+    "defense": 62,
+    "overall": 88
+  },
+  {
+    "id": "P022",
+    "name": "Toni Kroos",
+    "position": "MID",
+    "attack": 77,
+    "midfield": 91,
+    "defense": 68,
+    "overall": 88
+  },
+  {
+    "id": "P023",
+    "name": "Kylian Mbappe",
+    "position": "FWD",
+    "attack": 94,
+    "midfield": 82,
+    "defense": 38,
+    "overall": 91
+  },
+  {
+    "id": "P024",
+    "name": "Erling Haaland",
+    "position": "FWD",
+    "attack": 95,
+    "midfield": 68,
+    "defense": 42,
+    "overall": 91
+  },
+  {
+    "id": "P025",
+    "name": "Lionel Messi",
+    "position": "FWD",
+    "attack": 92,
+    "midfield": 92,
+    "defense": 35,
+    "overall": 90
+  },
+  {
+    "id": "P026",
+    "name": "Cristiano Ronaldo",
+    "position": "FWD",
+    "attack": 91,
+    "midfield": 75,
+    "defense": 36,
+    "overall": 88
+  },
+  {
+    "id": "P027",
+    "name": "Vinicius Junior",
+    "position": "FWD",
+    "attack": 92,
+    "midfield": 83,
+    "defense": 34,
+    "overall": 90
+  },
+  {
+    "id": "P028",
+    "name": "Mohamed Salah",
+    "position": "FWD",
+    "attack": 91,
+    "midfield": 84,
+    "defense": 45,
+    "overall": 89
+  },
+  {
+    "id": "P029",
+    "name": "Harry Kane",
+    "position": "FWD",
+    "attack": 93,
+    "midfield": 84,
+    "defense": 48,
+    "overall": 90
+  },
+  {
+    "id": "P030",
+    "name": "Bukayo Saka",
+    "position": "FWD",
+    "attack": 88,
+    "midfield": 82,
+    "defense": 58,
+    "overall": 87
+  },
+  {
+    "id": "P031",
+    "name": "Lamine Yamal",
+    "position": "FWD",
+    "attack": 87,
+    "midfield": 81,
+    "defense": 40,
+    "overall": 85
+  },
+  {
+    "id": "P032",
+    "name": "Joshua Kimmich",
+    "position": "DEF",
+    "attack": 68,
+    "midfield": 88,
+    "defense": 84,
+    "overall": 87
+  }
+]

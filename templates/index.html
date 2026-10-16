@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Football Battle | Two-Player Draft & AI Analyst</title>
+    <meta name="description" content="AI Football Battle is an AI-enhanced two-player football team drafting competition featuring deterministic calculations and an intelligent AI Game Analyst Agent.">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Application Header -->
+        <header class="app-header">
+            <div class="brand-section">
+                <div class="brand-logo-icon">⚽</div>
+                <div>
+                    <h1 class="brand-title">AI FOOTBALL BATTLE</h1>
+                    <div class="brand-subtitle">CSE 3202 Artificial Intelligence Sessional</div>
+                </div>
+            </div>
+
+            <!-- Navigation Bar -->
+            <nav class="nav-tabs" aria-label="Main Navigation">
+                <button id="nav-btn-draft" class="nav-tab-btn active" onclick="switchTab('draft')">
+                    <span>📋</span> 1. Draft Arena
+                </button>
+                <button id="nav-btn-analysis" class="nav-tab-btn" onclick="switchTab('analysis')">
+                    <span>📊</span> 2. Match Analysis
+                </button>
+                <button id="nav-btn-whatif" class="nav-tab-btn" onclick="switchTab('whatif')">
+                    <span>🧪</span> 3. What-If Strategy Lab
+                </button>
+            </nav>
+        </header>
+
+        <!-- =================================================================
+             SCREEN 1: DRAFT ARENA
+             ================================================================= -->
+        <main id="screen-draft" class="app-screen">
+            <!-- Setup & Configuration Bar -->
+            <section class="config-bar" aria-label="Match Configuration">
+                <div class="team-input-group">
+                    <div class="team-badge-circle team-badge-a">A</div>
+                    <input type="text" id="input-team-a-name" class="form-input" value="Team Alpha" placeholder="Team A Name">
+                    <select id="select-form-a" class="form-select">
+                        <option value="1-1-1-2" selected>1-1-1-2 (Aggressive)</option>
+                        <option value="1-1-2-1">1-1-2-1 (Balanced)</option>
+                        <option value="1-2-1-1">1-2-1-1 (Defensive)</option>
+                    </select>
+                </div>
+
+                <div style="font-weight: 800; color: var(--text-muted); font-size: 0.9rem;">VS</div>
+
+                <div class="team-input-group">
+                    <div class="team-badge-circle team-badge-b">B</div>
+                    <input type="text" id="input-team-b-name" class="form-input" value="Team Beta" placeholder="Team B Name">
+                    <select id="select-form-b" class="form-select">
+                        <option value="1-1-1-2" selected>1-1-1-2 (Aggressive)</option>
+                        <option value="1-1-2-1">1-1-2-1 (Balanced)</option>
+                        <option value="1-2-1-1">1-2-1-1 (Defensive)</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button id="btn-start-game" class="btn-primary"><span>🎮</span> New Match</button>
+                    <button id="btn-reset-draft" class="btn-secondary"><span>↺</span> Reset</button>
+                </div>
+            </section>
+
+            <!-- Turn Status and Progress Bar -->
+            <section class="draft-status-banner" aria-label="Turn Indicator">
+                <div class="turn-indicator-box">
+                    <div id="turn-pulse-dot" class="turn-pulse-dot turn-pulse-a"></div>
+                    <div>
+                        <div class="turn-label">Current Action</div>
+                        <div id="turn-status-text" class="turn-title">Team Alpha's Pick (Turn A)</div>
+                    </div>
+                </div>
+
+                <div class="draft-progress-wrapper">
+                    <div>
+                        <span id="draft-progress-text" class="progress-text">0 / 10 Drafted</span>
+                        <div class="progress-bar-outer">
+                            <div id="draft-progress-bar" class="progress-bar-inner"></div>
+                        </div>
+                    </div>
+                    <button id="btn-proceed-analyze" class="btn-accent" disabled>
+                        <span>⚡</span> Analyze Match
+                    </button>
+                </div>
+            </section>
+
+            <!-- 3-Column Draft Board -->
+            <section class="draft-grid">
+                <!-- Left: Team A Roster -->
+                <div id="panel-team-a" class="team-panel active-turn">
+                    <div class="team-panel-header">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="team-badge-circle team-badge-a" style="width:24px;height:24px;font-size:0.75rem;">A</span>
+                            <span id="team-title-a" class="team-panel-title">Team Alpha</span>
+                        </div>
+                        <span id="team-form-badge-a" class="team-panel-formation">1-1-1-2</span>
+                    </div>
+                    <div id="roster-list-a" class="roster-slots-list">
+                        <!-- 5 dynamic slots populated via draft.js -->
+                    </div>
+                </div>
+
+                <!-- Center: Player Pool Catalog -->
+                <div class="player-pool-container">
+                    <div class="pool-controls-bar">
+                        <input type="text" id="player-search-input" class="form-input pool-search-input" placeholder="🔍 Search footballers...">
+                        <div class="pos-filter-group">
+                            <button class="filter-btn active" data-pos="ALL">ALL</button>
+                            <button class="filter-btn" data-pos="GK">GK</button>
+                            <button class="filter-btn" data-pos="DEF">DEF</button>
+                            <button class="filter-btn" data-pos="MID">MID</button>
+                            <button class="filter-btn" data-pos="FWD">FWD</button>
+                        </div>
+                    </div>
+
+                    <div id="players-catalog-grid" class="players-catalog-grid">
+                        <!-- Populated by draft.js -->
+                    </div>
+                </div>
+
+                <!-- Right: Team B Roster -->
+                <div id="panel-team-b" class="team-panel">
+                    <div class="team-panel-header">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="team-badge-circle team-badge-b" style="width:24px;height:24px;font-size:0.75rem;">B</span>
+                            <span id="team-title-b" class="team-panel-title">Team Beta</span>
+                        </div>
+                        <span id="team-form-badge-b" class="team-panel-formation">1-1-1-2</span>
+                    </div>
+                    <div id="roster-list-b" class="roster-slots-list">
+                        <!-- 5 dynamic slots populated via draft.js -->
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- =================================================================
+             SCREEN 2: MATCH ANALYSIS DASHBOARD
+             ================================================================= -->
+        <main id="screen-analysis" class="app-screen" style="display: none;">
+            <div id="analysis-loading-state" style="text-align: center; padding: 60px 20px; display: none;">
+                <div class="turn-pulse-dot" style="margin: 0 auto 16px; width: 24px; height: 24px; background: var(--accent-cyan); box-shadow: 0 0 20px var(--accent-cyan);"></div>
+                <h3 style="color: var(--accent-cyan);">Running Deterministic Engine & AI Game Analyst...</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Crunching position weights, logistic win probability, and tactical matchups.</p>
+            </div>
+
+            <div id="analysis-content-state" class="analysis-dashboard">
+                <!-- Win Probability Banner -->
+                <section class="win-probability-card" aria-label="Win Probability Prediction">
+                    <div class="prob-header-title">Official Calculated Win Probability</div>
+                    <div class="prob-display-flex">
+                        <div class="team-prob-block">
+                            <div id="prob-name-a" class="team-prob-name" style="color: var(--team-a-accent);">Team Alpha</div>
+                            <div id="prob-val-a" class="team-prob-pct prob-pct-a">50.00%</div>
+                        </div>
+                        <div style="font-weight: 800; font-size: 1.2rem; color: var(--text-muted);">VS</div>
+                        <div class="team-prob-block team-b">
+                            <div id="prob-name-b" class="team-prob-name" style="color: var(--team-b-accent);">Team Beta</div>
+                            <div id="prob-val-b" class="team-prob-pct prob-pct-b">50.00%</div>
+                        </div>
+                    </div>
+
+                    <!-- Visual Probability Bar -->
+                    <div class="prob-bar-container">
+                        <div id="prob-bar-fill-a" class="prob-bar-fill-a" style="width: 50%;"></div>
+                    </div>
+                    <div class="prob-model-badge">
+                        <span>⚙️ Deterministic Logistic Model: P = 1 / (1 + e^(-ΔStrength / 12.0))</span>
+                    </div>
+                </section>
+
+                <!-- Deterministic Metrics Head-to-Head -->
+                <section class="metrics-comparison-card">
+                    <div class="card-section-title">
+                        <span>📈</span> Deterministic Head-to-Head Comparison
+                    </div>
+                    <div class="metrics-list">
+                        <!-- Attack Row -->
+                        <div class="metric-row">
+                            <div id="metric-val-a-att" class="metric-val-a">0.0</div>
+                            <div class="metric-bar-outer-a"><div id="metric-fill-a-att" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-title-badge">Attack Rating</div>
+                            <div class="metric-bar-outer-b"><div id="metric-fill-b-att" class="metric-bar-fill-b"></div></div>
+                            <div id="metric-val-b-att" class="metric-val-b">0.0</div>
+                        </div>
+
+                        <!-- Midfield Row -->
+                        <div class="metric-row">
+                            <div id="metric-val-a-mid" class="metric-val-a">0.0</div>
+                            <div class="metric-bar-outer-a"><div id="metric-fill-a-mid" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-title-badge">Midfield Rating</div>
+                            <div class="metric-bar-outer-b"><div id="metric-fill-b-mid" class="metric-bar-fill-b"></div></div>
+                            <div id="metric-val-b-mid" class="metric-val-b">0.0</div>
+                        </div>
+
+                        <!-- Defense Row -->
+                        <div class="metric-row">
+                            <div id="metric-val-a-def" class="metric-val-a">0.0</div>
+                            <div class="metric-bar-outer-a"><div id="metric-fill-a-def" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-title-badge">Defense Rating</div>
+                            <div class="metric-bar-outer-b"><div id="metric-fill-b-def" class="metric-bar-fill-b"></div></div>
+                            <div id="metric-val-b-def" class="metric-val-b">0.0</div>
+                        </div>
+
+                        <!-- Overall Row -->
+                        <div class="metric-row">
+                            <div id="metric-val-a-ovr" class="metric-val-a">0.0</div>
+                            <div class="metric-bar-outer-a"><div id="metric-fill-a-ovr" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-title-badge">Average Overall</div>
+                            <div class="metric-bar-outer-b"><div id="metric-fill-b-ovr" class="metric-bar-fill-b"></div></div>
+                            <div id="metric-val-b-ovr" class="metric-val-b">0.0</div>
+                        </div>
+
+                        <!-- Balance Row -->
+                        <div class="metric-row">
+                            <div id="metric-val-a-bal" class="metric-val-a">0.0</div>
+                            <div class="metric-bar-outer-a"><div id="metric-fill-a-bal" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-title-badge">Team Balance</div>
+                            <div class="metric-bar-outer-b"><div id="metric-fill-b-bal" class="metric-bar-fill-b"></div></div>
+                            <div id="metric-val-b-bal" class="metric-val-b">0.0</div>
+                        </div>
+
+                        <!-- Composite Strength Row -->
+                        <div class="metric-row">
+                            <div id="metric-val-a-str" class="metric-val-a" style="font-size:1.2rem; color:var(--accent-gold);">0.0</div>
+                            <div class="metric-bar-outer-a"><div id="metric-fill-a-str" class="metric-bar-fill-a" style="background:linear-gradient(90deg, #f59e0b, #fbbf24);"></div></div>
+                            <div class="metric-title-badge" style="background:rgba(245, 158, 11, 0.2); color:var(--accent-gold);">Strength</div>
+                            <div class="metric-bar-outer-b"><div id="metric-fill-b-str" class="metric-bar-fill-b" style="background:linear-gradient(90deg, #fbbf24, #f59e0b);"></div></div>
+                            <div id="metric-val-b-str" class="metric-val-b" style="font-size:1.2rem; color:var(--accent-gold);">0.0</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Game Analyst Commentary Box -->
+                <section class="ai-analyst-card" aria-label="AI Game Analyst Commentary">
+                    <div class="ai-header-flex">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.5rem;">🧠</span>
+                            <div>
+                                <h3 style="font-size: 1.25rem;">AI Football Game Analyst Agent</h3>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Goal-Based Decision Support & Natural Language Reasoner</div>
+                            </div>
+                        </div>
+                        <div id="ai-analyst-source-badge" class="ai-source-badge ai-source-fallback">
+                            <span>⚡</span> Heuristic Tactical Engine
+                        </div>
+                    </div>
+
+                    <!-- Summary Block -->
+                    <div id="ai-analyst-summary" class="ai-summary-block">
+                        Awaiting tactical analysis...
+                    </div>
+
+                    <!-- Team Assessments Grid -->
+                    <div class="ai-grid-assessments">
+                        <div class="ai-assessment-box">
+                            <div id="ai-title-team-a" class="ai-box-title" style="color: var(--team-a-accent);">Team Alpha Assessment</div>
+                            <div id="ai-analyst-team-a" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
+                        </div>
+                        <div class="ai-assessment-box">
+                            <div id="ai-title-team-b" class="ai-box-title" style="color: var(--team-b-accent);">Team Beta Assessment</div>
+                            <div id="ai-analyst-team-b" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Matchups & Verdict -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                        <div class="ai-verdict-box">
+                            <div class="ai-box-title" style="color: var(--accent-cyan);">Key Matchups & Pitch Dynamics</div>
+                            <div id="ai-analyst-matchups" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
+                        </div>
+                        <div class="ai-verdict-box">
+                            <div class="ai-box-title" style="color: var(--accent-gold);">Tactical Verdict & Outcome Driver</div>
+                            <div id="ai-analyst-verdict" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
+                        </div>
+                    </div>
+
+                    <!-- CTA to What-If Lab -->
+                    <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
+                        <button class="btn-secondary" onclick="switchTab('draft')"><span>←</span> Edit Draft</button>
+                        <button class="btn-primary" onclick="switchTab('whatif')"><span>🧪</span> Test What-If Scenarios →</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- =================================================================
+             SCREEN 3: WHAT-IF STRATEGY LAB
+             ================================================================= -->
+        <main id="screen-what-if" class="app-screen" style="display: none;">
+            <section class="what-if-control-panel">
+                <div class="card-section-title">
+                    <span>🧪</span> What-If Strategy Simulator
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
+                    Test hypothetical footballer substitutions or formation adjustments. The simulation operates on an isolated temporary copy without modifying the real game state.
+                </p>
+
+                <div class="what-if-controls-grid">
+                    <div class="form-group">
+                        <label for="whatif-select-team">Select Team</label>
+                        <select id="whatif-select-team" class="form-select">
+                            <option value="A" selected>Team A</option>
+                            <option value="B">Team B</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatif-select-out">Sub Out (Current Roster)</label>
+                        <select id="whatif-select-out" class="form-select"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatif-select-in">Sub In (Available Pool)</label>
+                        <select id="whatif-select-in" class="form-select"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatif-select-form">Tactical Formation</label>
+                        <select id="whatif-select-form" class="form-select">
+                            <option value="1-1-1-2" selected>1-1-1-2 (Aggressive)</option>
+                            <option value="1-1-2-1">1-1-2-1 (Balanced)</option>
+                            <option value="1-2-1-1">1-2-1-1 (Defensive)</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 8px;">
+                        <button id="btn-run-whatif" class="btn-primary"><span>⚡</span> Simulate</button>
+                        <button id="btn-reset-whatif" class="btn-secondary"><span>↺</span></button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <div id="whatif-loading-state" style="text-align: center; padding: 40px; display: none;">
+                <div class="turn-pulse-dot" style="margin: 0 auto 12px; width: 20px; height: 20px; background: var(--accent-emerald);"></div>
+                <p style="color: var(--text-secondary);">Calculating hypothetical trajectory & AI strategic feedback...</p>
+            </div>
+
+            <!-- What-If Results Grid -->
+            <div id="whatif-results-container" class="what-if-dashboard" style="display: none; margin-top: 24px;">
+                <!-- Side-by-side Cards -->
+                <div class="what-if-results-grid">
+                    <!-- Original Team Card -->
+                    <div class="result-card">
+                        <div class="result-card-header">
+                            <div>
+                                <h4 id="whatif-orig-name" style="font-size: 1.1rem;">Team Alpha (Original)</h4>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Actual Match Squad</span>
+                            </div>
+                            <span class="delta-badge delta-neutral">Baseline</span>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Win Probability</div>
+                            <div id="whatif-orig-prob" style="font-size: 2rem; font-weight: 800; font-family: 'Outfit', sans-serif;">50.0%</div>
+                        </div>
+                        <div class="card-stats-row">
+                            <div class="stat-item"><div class="stat-label">STR</div><div id="whatif-orig-str" class="stat-val">-</div></div>
+                            <div class="stat-item"><div class="stat-label">ATT</div><div id="whatif-orig-att" class="stat-val">-</div></div>
+                            <div class="stat-item"><div class="stat-label">MID</div><div id="whatif-orig-mid" class="stat-val">-</div></div>
+                            <div class="stat-item"><div class="stat-label">DEF</div><div id="whatif-orig-def" class="stat-val">-</div></div>
+                            <div class="stat-item"><div class="stat-label">BAL</div><div id="whatif-orig-bal" class="stat-val">-</div></div>
+                        </div>
+                    </div>
+
+                    <!-- Hypothetical Team Card -->
+                    <div class="result-card" style="border-color: var(--border-glow);">
+                        <div class="result-card-header">
+                            <div>
+                                <h4 id="whatif-hypo-name" style="font-size: 1.1rem; color: var(--accent-cyan);">Team Alpha (Simulated)</h4>
+                                <span style="font-size: 0.75rem; color: var(--accent-cyan);">Hypothetical Scenario</span>
+                            </div>
+                            <span id="whatif-delta-pill" class="delta-badge delta-positive">+0.0%</span>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Simulated Win Chance</div>
+                            <div id="whatif-hypo-prob" style="font-size: 2rem; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--accent-cyan);">50.0%</div>
+                        </div>
+                        <div class="card-stats-row">
+                            <div class="stat-item"><div class="stat-label">STR</div><div id="whatif-hypo-str" class="stat-val">-</div></div>
+                            <div class="stat-item"><div class="stat-label">ATT</div><div id="whatif-hypo-att" class="stat-val">-</div></div>
+                            <div class="stat-item"><div class="stat-label">MID</div><div id="whatif-hypo-mid" class="stat-val">-</div></div>
+                            <div class="stat-item"><div class="stat-label">DEF</div><div id="whatif-hypo-def" class="stat-val">-</div></div>
+                            <div class="stat-item"><div class="stat-label">BAL</div><div id="whatif-hypo-bal" class="stat-val">-</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI What-If Tactical Explanation -->
+                <section class="ai-analyst-card">
+                    <div class="ai-header-flex">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1.4rem;">🤖</span>
+                            <h3 style="font-size: 1.15rem;">AI Tactical Decision Support Analysis</h3>
+                        </div>
+                    </div>
+                    <div id="whatif-ai-explanation" class="ai-summary-block" style="border-left-color: var(--accent-emerald);">
+                        Simulate a tactical change above to receive AI decision support commentary.
+                    </div>
+                    <div style="margin-top: 18px; display: flex; justify-content: flex-end;">
+                        <button id="btn-back-to-analysis" class="btn-secondary"><span>←</span> Return to Match Analysis</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- UI Tab Controller Script -->
+    <script>
+        function switchTab(tabName) {
+            const screens = {
+                draft: document.getElementById("screen-draft"),
+                analysis: document.getElementById("screen-analysis"),
+                whatif: document.getElementById("screen-what-if")
+            };
+            const buttons = {
+                draft: document.getElementById("nav-btn-draft"),
+                analysis: document.getElementById("nav-btn-analysis"),
+                whatif: document.getElementById("nav-btn-whatif")
+            };
+
+            for (const key in screens) {
+                if (screens[key]) {
+                    screens[key].style.display = (key === tabName) ? "block" : "none";
+                }
+                if (buttons[key]) {
+                    buttons[key].classList.toggle("active", key === tabName);
+                }
+            }
+
+            if (tabName === "whatif") {
+                prepareWhatIfLab();
+            }
+        }
+    </script>
+
+    <!-- Core Modular Application Scripts -->
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/draft.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <script src="/static/js/what_if.js"></script>
+</body>
+</html>
