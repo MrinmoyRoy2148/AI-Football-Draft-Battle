@@ -36,19 +36,8 @@
             <!-- In-Game Navigation (Shown when playing/analyzing) -->
             <div id="game-header-nav" class="game-nav-group" style="display: none;">
                 <button class="btn-nav-home" onclick="switchTab('landing')">
-                    <span>←</span> Home
+                    <span>←</span> Exit to Home
                 </button>
-                <nav class="nav-tabs" aria-label="Game Navigation">
-                    <button id="nav-btn-draft" class="nav-tab-btn" onclick="switchTab('draft')">
-                        <span>📋</span> Draft Arena
-                    </button>
-                    <button id="nav-btn-analysis" class="nav-tab-btn" onclick="switchTab('analysis')" style="display: none;">
-                        <span>📊</span> Match Analysis
-                    </button>
-                    <button id="nav-btn-whatif" class="nav-tab-btn" onclick="switchTab('whatif')" style="display: none;">
-                        <span>🧪</span> What-If Lab
-                    </button>
-                </nav>
             </div>
         </header>
 
@@ -889,11 +878,6 @@
                 analysis: document.getElementById("screen-analysis"),
                 whatif: document.getElementById("screen-what-if")
             };
-            const buttons = {
-                draft: document.getElementById("nav-btn-draft"),
-                analysis: document.getElementById("nav-btn-analysis"),
-                whatif: document.getElementById("nav-btn-whatif")
-            };
 
             const landingNav = document.getElementById("landing-header-nav");
             const gameNav = document.getElementById("game-header-nav");
@@ -911,35 +895,12 @@
                     screens[key].style.display = (key === tabName) ? "block" : "none";
                 }
             }
-            for (const key in buttons) {
-                if (buttons[key]) {
-                    buttons[key].classList.toggle("active", key === tabName);
-                }
-            }
-
-            if (tabName === "analysis" || tabName === "whatif") {
-                unlockAnalysisTabs();
-            }
 
             if (tabName === "whatif") {
                 prepareWhatIfLab();
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function unlockAnalysisTabs() {
-            const btnAnalysis = document.getElementById("nav-btn-analysis");
-            const btnWhatif = document.getElementById("nav-btn-whatif");
-            if (btnAnalysis) btnAnalysis.style.display = "inline-flex";
-            if (btnWhatif) btnWhatif.style.display = "inline-flex";
-        }
-
-        function lockAnalysisTabs() {
-            const btnAnalysis = document.getElementById("nav-btn-analysis");
-            const btnWhatif = document.getElementById("nav-btn-whatif");
-            if (btnAnalysis) btnAnalysis.style.display = "none";
-            if (btnWhatif) btnWhatif.style.display = "none";
         }
 
         // Real-time Hero Logistic Probability Math Preview

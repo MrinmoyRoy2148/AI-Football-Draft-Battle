@@ -171,10 +171,6 @@ function resetToTeamSetup() {
     activeRandomCandidates = [];
     isFullCatalogVisible = false;
 
-    if (typeof lockAnalysisTabs === "function") {
-        lockAnalysisTabs();
-    }
-
     document.getElementById("draft-stage-setup").style.display = "block";
     document.getElementById("draft-stage-toss").style.display = "none";
     document.getElementById("draft-stage-arena").style.display = "none";
@@ -353,11 +349,6 @@ async function handleCheckMatchWinner() {
     try {
         showToast("⚙️ Locking tactical formations...", 1500);
         await updateGameFormations(currentGameData.game_id, formA, formB);
-
-        // Unlock Analysis and What-If tabs in navigation header
-        if (typeof unlockAnalysisTabs === "function") {
-            unlockAnalysisTabs();
-        }
 
         // Switch to Match Analysis screen and execute analysis
         switchTab("analysis");
@@ -593,10 +584,6 @@ async function quickStartDemoMatch() {
         }
 
         renderFullDraftView();
-
-        if (typeof unlockAnalysisTabs === "function") {
-            unlockAnalysisTabs();
-        }
 
         switchTab("analysis");
         await triggerMatchAnalysis();
