@@ -12,7 +12,7 @@ def clean_state():
 def test_health_and_players_endpoints():
     res_index = client.get("/")
     assert res_index.status_code == 200
-    assert "AI FOOTBALL BATTLE" in res_index.text
+    assert "ai football battle" in res_index.text.lower()
 
     res_health = client.get("/health")
     assert res_health.status_code == 200

@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Football Battle | Two-Player Draft & AI Analyst</title>
-    <meta name="description" content="AI Football Battle is an AI-enhanced two-player football team drafting competition featuring deterministic calculations and an intelligent AI Game Analyst Agent.">
+    <meta name="description"
+        content="AI Football Battle is an AI-enhanced two-player football team drafting competition featuring deterministic calculations and an intelligent AI Game Analyst Agent.">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Main Application Header -->
         <header class="app-header">
-            <div class="brand-section">
+            <div class="brand-section" style="cursor: pointer;" onclick="switchTab('landing')"
+                title="Return to Overview">
                 <div class="brand-logo-icon">⚽</div>
                 <div>
                     <h1 class="brand-title">AI FOOTBALL BATTLE</h1>
@@ -21,7 +25,10 @@
 
             <!-- Navigation Bar -->
             <nav class="nav-tabs" aria-label="Main Navigation">
-                <button id="nav-btn-draft" class="nav-tab-btn active" onclick="switchTab('draft')">
+                <button id="nav-btn-landing" class="nav-tab-btn active" onclick="switchTab('landing')">
+                    <span>🏠</span> Overview
+                </button>
+                <button id="nav-btn-draft" class="nav-tab-btn" onclick="switchTab('draft')">
                     <span>📋</span> 1. Draft Arena
                 </button>
                 <button id="nav-btn-analysis" class="nav-tab-btn" onclick="switchTab('analysis')">
@@ -34,14 +41,319 @@
         </header>
 
         <!-- =================================================================
+             SCREEN 0: LANDING PAGE & HERO SHOWCASE
+             ================================================================= -->
+        <main id="screen-landing" class="landing-view">
+            <!-- Hero Spotlight -->
+            <section class="landing-hero" aria-label="Hero Spotlight">
+                <div class="hero-content">
+                    <div class="hero-pill-badge">
+                        <span class="hero-pulsing-circle"></span>
+                        <span>CSE 3202 AI Sessional • Goal-Based AI Agent</span>
+                    </div>
+                    <h2 class="hero-headline">
+                        THE AI-POWERED
+                        <span class="hero-headline-accent">FOOTBALL DRAFT BATTLE</span>
+                    </h2>
+                    <p class="hero-subtitle">
+                        Two human players. Five superstar picks each. Experience rigid deterministic Python mathematics
+                        combined with an LLM Game Analyst Agent to calculate win probabilities, evaluate squad balance,
+                        and test What-If tactical maneuvers.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn-hero-launch" onclick="switchTab('draft')">
+                            <span>🎮</span> Start 2-Player Draft
+                        </button>
+                        <button class="btn-hero-demo" onclick="quickStartDemoMatch()">
+                            <span>⚡</span> Instant Quick Match Demo
+                        </button>
+                        <button class="btn-hero-outline"
+                            onclick="document.getElementById('section-pillars').scrollIntoView({behavior: 'smooth'})">
+                            <span>📐</span> Explore Architecture
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive Hero Matchup Preview Card -->
+                <div class="hero-visual-wrapper">
+                    <div class="hero-interactive-card">
+                        <div class="card-header-battle">
+                            <div style="font-weight: 800; font-size: 0.95rem; color: #fff;">LIVE TACTICAL PREVIEW</div>
+                            <div class="live-indicator">
+                                <span class="live-dot"></span>
+                                <span>Engine Active</span>
+                            </div>
+                        </div>
+
+                        <div class="battle-matchup-grid">
+                            <div class="battle-squad-col" style="border-color: rgba(56, 189, 248, 0.4);">
+                                <div class="squad-title" style="color: var(--team-a-accent);">Team Alpha</div>
+                                <div class="star-mini-row"><span>K. Mbappé</span><span class="ticker-ovr">91</span>
+                                </div>
+                                <div class="star-mini-row"><span>K. De Bruyne</span><span class="ticker-ovr">91</span>
+                                </div>
+                                <div class="star-mini-row"><span>V. van Dijk</span><span class="ticker-ovr">91</span>
+                                </div>
+                            </div>
+
+                            <div class="battle-vs-badge">VS</div>
+
+                            <div class="battle-squad-col" style="border-color: rgba(244, 63, 94, 0.4);">
+                                <div class="squad-title" style="color: var(--team-b-accent);">Team Beta</div>
+                                <div class="star-mini-row"><span>E. Haaland</span><span class="ticker-ovr">91</span>
+                                </div>
+                                <div class="star-mini-row"><span>L. Messi</span><span class="ticker-ovr">90</span></div>
+                                <div class="star-mini-row"><span>R. Dias</span><span class="ticker-ovr">89</span></div>
+                            </div>
+                        </div>
+
+                        <div class="hero-prob-box">
+                            <div class="hero-prob-numbers">
+                                <span id="hero-prob-a" style="color: var(--team-a-accent);">54.2%</span>
+                                <span
+                                    style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Win
+                                    Probability</span>
+                                <span id="hero-prob-b" style="color: var(--team-b-accent);">45.8%</span>
+                            </div>
+                            <div class="hero-prob-bar-track">
+                                <div id="hero-prob-fill" class="hero-prob-bar-fill"></div>
+                            </div>
+                            <div style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace;">
+                                Formula: P(A) = 1 / (1 + e^(-ΔStrength / 12.0))
+                            </div>
+                        </div>
+
+                        <!-- Interactive Math Tester Slider -->
+                        <div class="hero-calc-slider-box">
+                            <label for="hero-delta-slider">
+                                <span>Simulate Strength Delta (ΔStrength)</span>
+                                <span id="hero-slider-val" style="color: var(--accent-cyan); font-weight: 800;">+2.0
+                                    pts</span>
+                            </label>
+                            <input type="range" id="hero-delta-slider" class="hero-range-slider" min="-25" max="25"
+                                value="2" step="0.5" oninput="updateHeroSlider(this.value)">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Star Players Marquee Ticker -->
+            <section class="stars-ticker-section" aria-label="Curated Football Superstars">
+                <div class="stars-ticker-track">
+                    <div class="ticker-player-pill"><span class="pos-tag pos-fwd">FWD</span><span>Kylian
+                            Mbappé</span><span class="ticker-ovr">91</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-fwd">FWD</span><span>Erling
+                            Haaland</span><span class="ticker-ovr">91</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-mid">MID</span><span>Kevin De
+                            Bruyne</span><span class="ticker-ovr">91</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-mid">MID</span><span>Rodri
+                            Hernandez</span><span class="ticker-ovr">91</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-def">DEF</span><span>Virgil van
+                            Dijk</span><span class="ticker-ovr">91</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-fwd">FWD</span><span>Lionel
+                            Messi</span><span class="ticker-ovr">90</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-fwd">FWD</span><span>Vinicius
+                            Junior</span><span class="ticker-ovr">90</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-mid">MID</span><span>Jude
+                            Bellingham</span><span class="ticker-ovr">90</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-gk">GK</span><span>Thibaut
+                            Courtois</span><span class="ticker-ovr">90</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-fwd">FWD</span><span>Cristiano
+                            Ronaldo</span><span class="ticker-ovr">88</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-def">DEF</span><span>Ruben Dias</span><span
+                            class="ticker-ovr">89</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-mid">MID</span><span>Luka
+                            Modric</span><span class="ticker-ovr">87</span></div>
+                    <!-- Repeated for seamless loop -->
+                    <div class="ticker-player-pill"><span class="pos-tag pos-fwd">FWD</span><span>Kylian
+                            Mbappé</span><span class="ticker-ovr">91</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-fwd">FWD</span><span>Erling
+                            Haaland</span><span class="ticker-ovr">91</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-mid">MID</span><span>Kevin De
+                            Bruyne</span><span class="ticker-ovr">91</span></div>
+                    <div class="ticker-player-pill"><span class="pos-tag pos-def">DEF</span><span>Virgil van
+                            Dijk</span><span class="ticker-ovr">91</span></div>
+                </div>
+            </section>
+
+            <!-- 4 Core Pillars Section -->
+            <section id="section-pillars" class="pillars-section">
+                <div class="section-header-block">
+                    <div class="section-eyebrow">System Architecture</div>
+                    <h3 class="section-main-title">Built On Four Robust Pillars</h3>
+                    <p class="section-desc-text">
+                        A strict separation between deterministic calculation and AI natural language reasoning
+                        guarantees mathematical integrity and deep strategic insights.
+                    </p>
+                </div>
+
+                <div class="pillars-grid">
+                    <!-- Pillar 1 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon-box">📋</div>
+                        <h4 class="pillar-title">Alternating Draft</h4>
+                        <p class="pillar-body">
+                            Two players take turns drafting five players each from a static 32-player dataset.
+                            Backend-authoritative turn enforcement prevents duplicate selections.
+                        </p>
+                        <span class="pillar-badge-tag">Turn-Based Game Logic</span>
+                    </div>
+
+                    <!-- Pillar 2 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon-box">⚙️</div>
+                        <h4 class="pillar-title">Deterministic Engine</h4>
+                        <p class="pillar-body">
+                            Computes normalized Attack, Midfield, Defense, Team Balance ($0\text{--}100$), Composite
+                            Strength, and Logistic Sigmoid win probability with steepness constant $k=12.0$.
+                        </p>
+                        <span class="pillar-badge-tag">Mathematical Ground Truth</span>
+                    </div>
+
+                    <!-- Pillar 3 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon-box">🧠</div>
+                        <h4 class="pillar-title">AI Game Analyst</h4>
+                        <p class="pillar-body">
+                            A goal-based decision support agent that inspects squad matchups, tactical phase control,
+                            and generates reasoned broadcast-quality commentary with offline fallback.
+                        </p>
+                        <span class="pillar-badge-tag">Goal-Based AI Agent</span>
+                    </div>
+
+                    <!-- Pillar 4 -->
+                    <div class="pillar-card">
+                        <div class="pillar-icon-box">🧪</div>
+                        <h4 class="pillar-title">What-If Strategy Lab</h4>
+                        <p class="pillar-body">
+                            Simulate hypothetical substitutions and formation shifts on an isolated deep copy. Test
+                            strategic trade-offs without mutating the real match state.
+                        </p>
+                        <span class="pillar-badge-tag">Isolated Simulation</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Step-by-Step Flow -->
+            <section class="how-it-works-section">
+                <div class="section-header-block">
+                    <div class="section-eyebrow">Match Workflow</div>
+                    <h3 class="section-main-title">How AI Football Battle Works</h3>
+                    <p class="section-desc-text">From drafting your opening goalkeeper to evaluating counter-tactics in
+                        the What-If Lab.</p>
+                </div>
+
+                <div class="flow-steps-grid">
+                    <div class="flow-step-card">
+                        <div class="step-num-badge">1</div>
+                        <h4 class="flow-step-title">Draft 5 Superstars</h4>
+                        <p class="flow-step-desc">
+                            Players alternate turns drafting footballers. Balance your attacking punch, midfield ball
+                            retention, and defensive backline to maximize synergy.
+                        </p>
+                    </div>
+
+                    <div class="flow-step-card">
+                        <div class="step-num-badge">2</div>
+                        <h4 class="flow-step-title">Compute Ground Truth</h4>
+                        <p class="flow-step-desc">
+                            Our deterministic Python engine applies position weights, calculates team balance index, and
+                            generates mathematically consistent win probabilities.
+                        </p>
+                    </div>
+
+                    <div class="flow-step-card">
+                        <div class="step-num-badge">3</div>
+                        <h4 class="flow-step-title">AI Analysis & What-If</h4>
+                        <p class="flow-step-desc">
+                            Receive natural-language tactical breakdowns from the AI Game Analyst and simulate
+                            hypothetical substitutions to find winning adjustments.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Academic & PEAS Specification Section -->
+            <section id="section-peas" class="peas-section">
+                <div class="section-header-block">
+                    <div class="section-eyebrow">Academic Rigor</div>
+                    <h3 class="section-main-title">PEAS Agent Specification</h3>
+                    <p class="section-desc-text">Formal characterization of the AI Football Game Analyst Agent for CSE
+                        3202 Artificial Intelligence Sessional.</p>
+                </div>
+
+                <div class="peas-matrix-grid">
+                    <div class="peas-card">
+                        <span class="peas-tag peas-tag-p">Performance</span>
+                        <h4 class="peas-title">Rules & Accuracy</h4>
+                        <p class="peas-desc">Strict turn enforcement, zero duplicate picks, mathematical consistency in
+                            win probabilities (summing to 100%), and non-hallucinated AI explanations.</p>
+                    </div>
+
+                    <div class="peas-card">
+                        <span class="peas-tag peas-tag-e">Environment</span>
+                        <h4 class="peas-title">Partially Observable</h4>
+                        <p class="peas-desc">Browser game between two human players. Environment is discrete,
+                            sequential, multi-agent, and mostly deterministic (variation only in natural language).</p>
+                    </div>
+
+                    <div class="peas-card">
+                        <span class="peas-tag peas-tag-a">Actuators</span>
+                        <h4 class="peas-title">UI & Visualizers</h4>
+                        <p class="peas-desc">Displays available player pool, live rosters, turn indicators, comparative
+                            metric charts, win probability gauge, and What-If comparison deltas.</p>
+                    </div>
+
+                    <div class="peas-card">
+                        <span class="peas-tag peas-tag-s">Sensors</span>
+                        <h4 class="peas-title">Inputs & State</h4>
+                        <p class="peas-desc">Human draft selections, team names, formation choices, static 32-player
+                            JSON dataset, and user-initiated What-If substitution requests.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bottom CTA Banner -->
+            <section class="landing-cta-banner">
+                <h3 class="cta-banner-title">Ready To Test Your Tactical Instincts?</h3>
+                <p class="cta-banner-desc">
+                    Enter the Draft Arena to build your squad against a rival, or launch an instant demo match to
+                    experience the AI Game Analyst in action.
+                </p>
+                <div style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;">
+                    <button class="btn-hero-launch" onclick="switchTab('draft')">
+                        <span>🎮</span> Open Draft Arena
+                    </button>
+                    <button class="btn-hero-demo" onclick="quickStartDemoMatch()">
+                        <span>⚡</span> Launch Instant Demo Match
+                    </button>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="landing-footer">
+                <div class="footer-credits">
+                    <div style="font-weight: 700; color: #fff;">CSE 3202 Artificial Intelligence Sessional</div>
+                    <div>Department of Computer Science & Engineering • BAUST</div>
+                </div>
+                <div style="text-align: right; font-size: 0.8rem;">
+                    <div>Supervised by: Md Zahim Hassan & Md. Minhazul Islam</div>
+                    <div style="color: var(--accent-cyan); font-weight: 600;">Submitted by: Group 4 (Mrinmoy Roy & Md.
+                        Shubhi Nida)</div>
+                </div>
+            </footer>
+        </main>
+
+        <!-- =================================================================
              SCREEN 1: DRAFT ARENA
              ================================================================= -->
-        <main id="screen-draft" class="app-screen">
+        <main id="screen-draft" class="app-screen" style="display: none;">
             <!-- Setup & Configuration Bar -->
             <section class="config-bar" aria-label="Match Configuration">
                 <div class="team-input-group">
                     <div class="team-badge-circle team-badge-a">A</div>
-                    <input type="text" id="input-team-a-name" class="form-input" value="Team Alpha" placeholder="Team A Name">
+                    <input type="text" id="input-team-a-name" class="form-input" value="Team Alpha"
+                        placeholder="Team A Name">
                     <select id="select-form-a" class="form-select">
                         <option value="1-1-1-2" selected>1-1-1-2 (Aggressive)</option>
                         <option value="1-1-2-1">1-1-2-1 (Balanced)</option>
@@ -53,7 +365,8 @@
 
                 <div class="team-input-group">
                     <div class="team-badge-circle team-badge-b">B</div>
-                    <input type="text" id="input-team-b-name" class="form-input" value="Team Beta" placeholder="Team B Name">
+                    <input type="text" id="input-team-b-name" class="form-input" value="Team Beta"
+                        placeholder="Team B Name">
                     <select id="select-form-b" class="form-select">
                         <option value="1-1-1-2" selected>1-1-1-2 (Aggressive)</option>
                         <option value="1-1-2-1">1-1-2-1 (Balanced)</option>
@@ -96,7 +409,8 @@
                 <div id="panel-team-a" class="team-panel active-turn">
                     <div class="team-panel-header">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="team-badge-circle team-badge-a" style="width:24px;height:24px;font-size:0.75rem;">A</span>
+                            <span class="team-badge-circle team-badge-a"
+                                style="width:24px;height:24px;font-size:0.75rem;">A</span>
                             <span id="team-title-a" class="team-panel-title">Team Alpha</span>
                         </div>
                         <span id="team-form-badge-a" class="team-panel-formation">1-1-1-2</span>
@@ -109,7 +423,8 @@
                 <!-- Center: Player Pool Catalog -->
                 <div class="player-pool-container">
                     <div class="pool-controls-bar">
-                        <input type="text" id="player-search-input" class="form-input pool-search-input" placeholder="🔍 Search footballers...">
+                        <input type="text" id="player-search-input" class="form-input pool-search-input"
+                            placeholder="🔍 Search footballers...">
                         <div class="pos-filter-group">
                             <button class="filter-btn active" data-pos="ALL">ALL</button>
                             <button class="filter-btn" data-pos="GK">GK</button>
@@ -128,7 +443,8 @@
                 <div id="panel-team-b" class="team-panel">
                     <div class="team-panel-header">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="team-badge-circle team-badge-b" style="width:24px;height:24px;font-size:0.75rem;">B</span>
+                            <span class="team-badge-circle team-badge-b"
+                                style="width:24px;height:24px;font-size:0.75rem;">B</span>
                             <span id="team-title-b" class="team-panel-title">Team Beta</span>
                         </div>
                         <span id="team-form-badge-b" class="team-panel-formation">1-1-1-2</span>
@@ -145,9 +461,12 @@
              ================================================================= -->
         <main id="screen-analysis" class="app-screen" style="display: none;">
             <div id="analysis-loading-state" style="text-align: center; padding: 60px 20px; display: none;">
-                <div class="turn-pulse-dot" style="margin: 0 auto 16px; width: 24px; height: 24px; background: var(--accent-cyan); box-shadow: 0 0 20px var(--accent-cyan);"></div>
+                <div class="turn-pulse-dot"
+                    style="margin: 0 auto 16px; width: 24px; height: 24px; background: var(--accent-cyan); box-shadow: 0 0 20px var(--accent-cyan);">
+                </div>
                 <h3 style="color: var(--accent-cyan);">Running Deterministic Engine & AI Game Analyst...</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Crunching position weights, logistic win probability, and tactical matchups.</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Crunching position weights,
+                    logistic win probability, and tactical matchups.</p>
             </div>
 
             <div id="analysis-content-state" class="analysis-dashboard">
@@ -156,12 +475,14 @@
                     <div class="prob-header-title">Official Calculated Win Probability</div>
                     <div class="prob-display-flex">
                         <div class="team-prob-block">
-                            <div id="prob-name-a" class="team-prob-name" style="color: var(--team-a-accent);">Team Alpha</div>
+                            <div id="prob-name-a" class="team-prob-name" style="color: var(--team-a-accent);">Team Alpha
+                            </div>
                             <div id="prob-val-a" class="team-prob-pct prob-pct-a">50.00%</div>
                         </div>
                         <div style="font-weight: 800; font-size: 1.2rem; color: var(--text-muted);">VS</div>
                         <div class="team-prob-block team-b">
-                            <div id="prob-name-b" class="team-prob-name" style="color: var(--team-b-accent);">Team Beta</div>
+                            <div id="prob-name-b" class="team-prob-name" style="color: var(--team-b-accent);">Team Beta
+                            </div>
                             <div id="prob-val-b" class="team-prob-pct prob-pct-b">50.00%</div>
                         </div>
                     </div>
@@ -184,55 +505,84 @@
                         <!-- Attack Row -->
                         <div class="metric-row">
                             <div id="metric-val-a-att" class="metric-val-a">0.0</div>
-                            <div class="metric-bar-outer-a"><div id="metric-fill-a-att" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-bar-outer-a">
+                                <div id="metric-fill-a-att" class="metric-bar-fill-a"></div>
+                            </div>
                             <div class="metric-title-badge">Attack Rating</div>
-                            <div class="metric-bar-outer-b"><div id="metric-fill-b-att" class="metric-bar-fill-b"></div></div>
+                            <div class="metric-bar-outer-b">
+                                <div id="metric-fill-b-att" class="metric-bar-fill-b"></div>
+                            </div>
                             <div id="metric-val-b-att" class="metric-val-b">0.0</div>
                         </div>
 
                         <!-- Midfield Row -->
                         <div class="metric-row">
                             <div id="metric-val-a-mid" class="metric-val-a">0.0</div>
-                            <div class="metric-bar-outer-a"><div id="metric-fill-a-mid" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-bar-outer-a">
+                                <div id="metric-fill-a-mid" class="metric-bar-fill-a"></div>
+                            </div>
                             <div class="metric-title-badge">Midfield Rating</div>
-                            <div class="metric-bar-outer-b"><div id="metric-fill-b-mid" class="metric-bar-fill-b"></div></div>
+                            <div class="metric-bar-outer-b">
+                                <div id="metric-fill-b-mid" class="metric-bar-fill-b"></div>
+                            </div>
                             <div id="metric-val-b-mid" class="metric-val-b">0.0</div>
                         </div>
 
                         <!-- Defense Row -->
                         <div class="metric-row">
                             <div id="metric-val-a-def" class="metric-val-a">0.0</div>
-                            <div class="metric-bar-outer-a"><div id="metric-fill-a-def" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-bar-outer-a">
+                                <div id="metric-fill-a-def" class="metric-bar-fill-a"></div>
+                            </div>
                             <div class="metric-title-badge">Defense Rating</div>
-                            <div class="metric-bar-outer-b"><div id="metric-fill-b-def" class="metric-bar-fill-b"></div></div>
+                            <div class="metric-bar-outer-b">
+                                <div id="metric-fill-b-def" class="metric-bar-fill-b"></div>
+                            </div>
                             <div id="metric-val-b-def" class="metric-val-b">0.0</div>
                         </div>
 
                         <!-- Overall Row -->
                         <div class="metric-row">
                             <div id="metric-val-a-ovr" class="metric-val-a">0.0</div>
-                            <div class="metric-bar-outer-a"><div id="metric-fill-a-ovr" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-bar-outer-a">
+                                <div id="metric-fill-a-ovr" class="metric-bar-fill-a"></div>
+                            </div>
                             <div class="metric-title-badge">Average Overall</div>
-                            <div class="metric-bar-outer-b"><div id="metric-fill-b-ovr" class="metric-bar-fill-b"></div></div>
+                            <div class="metric-bar-outer-b">
+                                <div id="metric-fill-b-ovr" class="metric-bar-fill-b"></div>
+                            </div>
                             <div id="metric-val-b-ovr" class="metric-val-b">0.0</div>
                         </div>
 
                         <!-- Balance Row -->
                         <div class="metric-row">
                             <div id="metric-val-a-bal" class="metric-val-a">0.0</div>
-                            <div class="metric-bar-outer-a"><div id="metric-fill-a-bal" class="metric-bar-fill-a"></div></div>
+                            <div class="metric-bar-outer-a">
+                                <div id="metric-fill-a-bal" class="metric-bar-fill-a"></div>
+                            </div>
                             <div class="metric-title-badge">Team Balance</div>
-                            <div class="metric-bar-outer-b"><div id="metric-fill-b-bal" class="metric-bar-fill-b"></div></div>
+                            <div class="metric-bar-outer-b">
+                                <div id="metric-fill-b-bal" class="metric-bar-fill-b"></div>
+                            </div>
                             <div id="metric-val-b-bal" class="metric-val-b">0.0</div>
                         </div>
 
                         <!-- Composite Strength Row -->
                         <div class="metric-row">
-                            <div id="metric-val-a-str" class="metric-val-a" style="font-size:1.2rem; color:var(--accent-gold);">0.0</div>
-                            <div class="metric-bar-outer-a"><div id="metric-fill-a-str" class="metric-bar-fill-a" style="background:linear-gradient(90deg, #f59e0b, #fbbf24);"></div></div>
-                            <div class="metric-title-badge" style="background:rgba(245, 158, 11, 0.2); color:var(--accent-gold);">Strength</div>
-                            <div class="metric-bar-outer-b"><div id="metric-fill-b-str" class="metric-bar-fill-b" style="background:linear-gradient(90deg, #fbbf24, #f59e0b);"></div></div>
-                            <div id="metric-val-b-str" class="metric-val-b" style="font-size:1.2rem; color:var(--accent-gold);">0.0</div>
+                            <div id="metric-val-a-str" class="metric-val-a"
+                                style="font-size:1.2rem; color:var(--accent-gold);">0.0</div>
+                            <div class="metric-bar-outer-a">
+                                <div id="metric-fill-a-str" class="metric-bar-fill-a"
+                                    style="background:linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+                            </div>
+                            <div class="metric-title-badge"
+                                style="background:rgba(245, 158, 11, 0.2); color:var(--accent-gold);">Strength</div>
+                            <div class="metric-bar-outer-b">
+                                <div id="metric-fill-b-str" class="metric-bar-fill-b"
+                                    style="background:linear-gradient(90deg, #fbbf24, #f59e0b);"></div>
+                            </div>
+                            <div id="metric-val-b-str" class="metric-val-b"
+                                style="font-size:1.2rem; color:var(--accent-gold);">0.0</div>
                         </div>
                     </div>
                 </section>
@@ -244,7 +594,8 @@
                             <span style="font-size: 1.5rem;">🧠</span>
                             <div>
                                 <h3 style="font-size: 1.25rem;">AI Football Game Analyst Agent</h3>
-                                <div style="font-size: 0.75rem; color: var(--text-muted);">Goal-Based Decision Support & Natural Language Reasoner</div>
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">Goal-Based Decision Support &
+                                    Natural Language Reasoner</div>
                             </div>
                         </div>
                         <div id="ai-analyst-source-badge" class="ai-source-badge ai-source-fallback">
@@ -260,31 +611,40 @@
                     <!-- Team Assessments Grid -->
                     <div class="ai-grid-assessments">
                         <div class="ai-assessment-box">
-                            <div id="ai-title-team-a" class="ai-box-title" style="color: var(--team-a-accent);">Team Alpha Assessment</div>
-                            <div id="ai-analyst-team-a" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
+                            <div id="ai-title-team-a" class="ai-box-title" style="color: var(--team-a-accent);">Team
+                                Alpha Assessment</div>
+                            <div id="ai-analyst-team-a"
+                                style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
                         </div>
                         <div class="ai-assessment-box">
-                            <div id="ai-title-team-b" class="ai-box-title" style="color: var(--team-b-accent);">Team Beta Assessment</div>
-                            <div id="ai-analyst-team-b" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
+                            <div id="ai-title-team-b" class="ai-box-title" style="color: var(--team-b-accent);">Team
+                                Beta Assessment</div>
+                            <div id="ai-analyst-team-b"
+                                style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
                         </div>
                     </div>
 
                     <!-- Matchups & Verdict -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="ai-verdict-box">
-                            <div class="ai-box-title" style="color: var(--accent-cyan);">Key Matchups & Pitch Dynamics</div>
-                            <div id="ai-analyst-matchups" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
+                            <div class="ai-box-title" style="color: var(--accent-cyan);">Key Matchups & Pitch Dynamics
+                            </div>
+                            <div id="ai-analyst-matchups"
+                                style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
                         </div>
                         <div class="ai-verdict-box">
-                            <div class="ai-box-title" style="color: var(--accent-gold);">Tactical Verdict & Outcome Driver</div>
-                            <div id="ai-analyst-verdict" style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
+                            <div class="ai-box-title" style="color: var(--accent-gold);">Tactical Verdict & Outcome
+                                Driver</div>
+                            <div id="ai-analyst-verdict"
+                                style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);"></div>
                         </div>
                     </div>
 
                     <!-- CTA to What-If Lab -->
                     <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
                         <button class="btn-secondary" onclick="switchTab('draft')"><span>←</span> Edit Draft</button>
-                        <button class="btn-primary" onclick="switchTab('whatif')"><span>🧪</span> Test What-If Scenarios →</button>
+                        <button class="btn-primary" onclick="switchTab('whatif')"><span>🧪</span> Test What-If Scenarios
+                            →</button>
                     </div>
                 </section>
             </div>
@@ -299,7 +659,8 @@
                     <span>🧪</span> What-If Strategy Simulator
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px;">
-                    Test hypothetical footballer substitutions or formation adjustments. The simulation operates on an isolated temporary copy without modifying the real game state.
+                    Test hypothetical footballer substitutions or formation adjustments. The simulation operates on an
+                    isolated temporary copy without modifying the real game state.
                 </p>
 
                 <div class="what-if-controls-grid">
@@ -339,8 +700,10 @@
 
             <!-- Loading State -->
             <div id="whatif-loading-state" style="text-align: center; padding: 40px; display: none;">
-                <div class="turn-pulse-dot" style="margin: 0 auto 12px; width: 20px; height: 20px; background: var(--accent-emerald);"></div>
-                <p style="color: var(--text-secondary);">Calculating hypothetical trajectory & AI strategic feedback...</p>
+                <div class="turn-pulse-dot"
+                    style="margin: 0 auto 12px; width: 20px; height: 20px; background: var(--accent-emerald);"></div>
+                <p style="color: var(--text-secondary);">Calculating hypothetical trajectory & AI strategic feedback...
+                </p>
             </div>
 
             <!-- What-If Results Grid -->
@@ -357,15 +720,33 @@
                             <span class="delta-badge delta-neutral">Baseline</span>
                         </div>
                         <div style="margin-bottom: 16px;">
-                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Win Probability</div>
-                            <div id="whatif-orig-prob" style="font-size: 2rem; font-weight: 800; font-family: 'Outfit', sans-serif;">50.0%</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Win
+                                Probability</div>
+                            <div id="whatif-orig-prob"
+                                style="font-size: 2rem; font-weight: 800; font-family: 'Outfit', sans-serif;">50.0%
+                            </div>
                         </div>
                         <div class="card-stats-row">
-                            <div class="stat-item"><div class="stat-label">STR</div><div id="whatif-orig-str" class="stat-val">-</div></div>
-                            <div class="stat-item"><div class="stat-label">ATT</div><div id="whatif-orig-att" class="stat-val">-</div></div>
-                            <div class="stat-item"><div class="stat-label">MID</div><div id="whatif-orig-mid" class="stat-val">-</div></div>
-                            <div class="stat-item"><div class="stat-label">DEF</div><div id="whatif-orig-def" class="stat-val">-</div></div>
-                            <div class="stat-item"><div class="stat-label">BAL</div><div id="whatif-orig-bal" class="stat-val">-</div></div>
+                            <div class="stat-item">
+                                <div class="stat-label">STR</div>
+                                <div id="whatif-orig-str" class="stat-val">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">ATT</div>
+                                <div id="whatif-orig-att" class="stat-val">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">MID</div>
+                                <div id="whatif-orig-mid" class="stat-val">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">DEF</div>
+                                <div id="whatif-orig-def" class="stat-val">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">BAL</div>
+                                <div id="whatif-orig-bal" class="stat-val">-</div>
+                            </div>
                         </div>
                     </div>
 
@@ -373,21 +754,41 @@
                     <div class="result-card" style="border-color: var(--border-glow);">
                         <div class="result-card-header">
                             <div>
-                                <h4 id="whatif-hypo-name" style="font-size: 1.1rem; color: var(--accent-cyan);">Team Alpha (Simulated)</h4>
-                                <span style="font-size: 0.75rem; color: var(--accent-cyan);">Hypothetical Scenario</span>
+                                <h4 id="whatif-hypo-name" style="font-size: 1.1rem; color: var(--accent-cyan);">Team
+                                    Alpha (Simulated)</h4>
+                                <span style="font-size: 0.75rem; color: var(--accent-cyan);">Hypothetical
+                                    Scenario</span>
                             </div>
                             <span id="whatif-delta-pill" class="delta-badge delta-positive">+0.0%</span>
                         </div>
                         <div style="margin-bottom: 16px;">
-                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Simulated Win Chance</div>
-                            <div id="whatif-hypo-prob" style="font-size: 2rem; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--accent-cyan);">50.0%</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">
+                                Simulated Win Chance</div>
+                            <div id="whatif-hypo-prob"
+                                style="font-size: 2rem; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--accent-cyan);">
+                                50.0%</div>
                         </div>
                         <div class="card-stats-row">
-                            <div class="stat-item"><div class="stat-label">STR</div><div id="whatif-hypo-str" class="stat-val">-</div></div>
-                            <div class="stat-item"><div class="stat-label">ATT</div><div id="whatif-hypo-att" class="stat-val">-</div></div>
-                            <div class="stat-item"><div class="stat-label">MID</div><div id="whatif-hypo-mid" class="stat-val">-</div></div>
-                            <div class="stat-item"><div class="stat-label">DEF</div><div id="whatif-hypo-def" class="stat-val">-</div></div>
-                            <div class="stat-item"><div class="stat-label">BAL</div><div id="whatif-hypo-bal" class="stat-val">-</div></div>
+                            <div class="stat-item">
+                                <div class="stat-label">STR</div>
+                                <div id="whatif-hypo-str" class="stat-val">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">ATT</div>
+                                <div id="whatif-hypo-att" class="stat-val">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">MID</div>
+                                <div id="whatif-hypo-mid" class="stat-val">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">DEF</div>
+                                <div id="whatif-hypo-def" class="stat-val">-</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-label">BAL</div>
+                                <div id="whatif-hypo-bal" class="stat-val">-</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -400,11 +801,13 @@
                             <h3 style="font-size: 1.15rem;">AI Tactical Decision Support Analysis</h3>
                         </div>
                     </div>
-                    <div id="whatif-ai-explanation" class="ai-summary-block" style="border-left-color: var(--accent-emerald);">
+                    <div id="whatif-ai-explanation" class="ai-summary-block"
+                        style="border-left-color: var(--accent-emerald);">
                         Simulate a tactical change above to receive AI decision support commentary.
                     </div>
                     <div style="margin-top: 18px; display: flex; justify-content: flex-end;">
-                        <button id="btn-back-to-analysis" class="btn-secondary"><span>←</span> Return to Match Analysis</button>
+                        <button id="btn-back-to-analysis" class="btn-secondary"><span>←</span> Return to Match
+                            Analysis</button>
                     </div>
                 </section>
             </div>
@@ -415,11 +818,13 @@
     <script>
         function switchTab(tabName) {
             const screens = {
+                landing: document.getElementById("screen-landing"),
                 draft: document.getElementById("screen-draft"),
                 analysis: document.getElementById("screen-analysis"),
                 whatif: document.getElementById("screen-what-if")
             };
             const buttons = {
+                landing: document.getElementById("nav-btn-landing"),
                 draft: document.getElementById("nav-btn-draft"),
                 analysis: document.getElementById("nav-btn-analysis"),
                 whatif: document.getElementById("nav-btn-whatif")
@@ -437,6 +842,30 @@
             if (tabName === "whatif") {
                 prepareWhatIfLab();
             }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Real-time Hero Logistic Probability Math Preview
+        function updateHeroSlider(val) {
+            const diff = parseFloat(val);
+            const sliderLabel = document.getElementById("hero-slider-val");
+            if (sliderLabel) {
+                sliderLabel.textContent = `${diff >= 0 ? '+' : ''}${diff.toFixed(1)} pts`;
+            }
+
+            const k = 12.0;
+            const pA = 1.0 / (1.0 + Math.exp(-diff / k));
+            const pAPct = (pA * 100).toFixed(1);
+            const pBPct = (100.0 - parseFloat(pAPct)).toFixed(1);
+
+            const probAEl = document.getElementById("hero-prob-a");
+            const probBEl = document.getElementById("hero-prob-b");
+            const fillEl = document.getElementById("hero-prob-fill");
+
+            if (probAEl) probAEl.textContent = `${pAPct}%`;
+            if (probBEl) probBEl.textContent = `${pBPct}%`;
+            if (fillEl) fillEl.style.width = `${pAPct}%`;
         }
     </script>
 
@@ -446,4 +875,5 @@
     <script src="/static/js/dashboard.js"></script>
     <script src="/static/js/what_if.js"></script>
 </body>
+
 </html>

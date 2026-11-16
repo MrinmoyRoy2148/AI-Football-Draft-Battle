@@ -288,3 +288,48 @@ function showToast(message, duration = 3000) {
         setTimeout(() => toast.remove(), 400);
     }, duration);
 }
+
+// Instant Quick Match Demo triggered from Landing Page
+async function quickStartDemoMatch() {
+    showToast("⚡ Initializing Instant Match Demo...", 2500);
+
+    try {
+        if (!allPlayersList || allPlayersList.length === 0) {
+            allPlayersList = await fetchAllPlayers();
+        }
+
+        // Create new session with exciting team identities
+        currentGameData = await createGameSession(
+            "Galácticos Alpha",
+            "Legends Beta",
+            "1-1-1-2",
+            "1-1-1-2"
+        );
+
+        // Curated balanced draft picks:
+        // A: Courtois(GK), Van Dijk(DEF), De Bruyne(MID), Mbappe(FWD), Messi(FWD)
+        // B: Alisson(GK), Dias(DEF), Bellingham(MID), Haaland(FWD), Ronaldo(FWD)
+        const demoDraftPicks = [
+            "P001", "P002",
+            "P006", "P007",
+            "P014", "P015",
+            "P023", "P024",
+            "P025", "P026"
+        ];
+
+        for (const pid of demoDraftPicks) {
+            currentGameData = await draftPlayerPick(currentGameData.game_id, pid);
+        }
+
+        renderFullDraftView();
+
+        // Smoothly transition directly to Match Analysis
+        switchTab("analysis");
+        await triggerMatchAnalysis();
+
+        showToast("🌟 Instant Match Draft Complete! AI Tactical Analyst is live.", 4000);
+    } catch (err) {
+        showToast("Quick Match Demo Error: " + err.message);
+    }
+}
+
