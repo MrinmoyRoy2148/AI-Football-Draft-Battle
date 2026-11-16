@@ -38,12 +38,17 @@ def process_draft_pick(game_id: str, player_id: str) -> GameState:
     # Check if both teams are full (5 players each = 10 total picks)
     team_a_count = len(game.teams["A"].player_ids)
     team_b_count = len(game.teams["B"].player_ids)
+    total_picked = team_a_count + team_b_count
 
     if team_a_count == 5 and team_b_count == 5:
         game.status = "completed"
     else:
-        # Alternate turn
-        game.current_turn = "B" if current_team_id == "A" else "A"
+        # Determine next turn based on draft mode
+        if game.draft_mode == "snake" and game.draft_order and total_picked < len(game.draft_order):
+            game.current_turn = game.draft_order[total_picked]
+        else:
+            # Alternate turn
+            game.current_turn = "B" if current_team_id == "A" else "A"
         game.draft_round += 1
 
     return game

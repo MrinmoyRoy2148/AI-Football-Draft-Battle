@@ -286,5 +286,203 @@
     "midfield": 88,
     "defense": 84,
     "overall": 87
+  },
+  {
+    "id": "P033",
+    "name": "Marc-Andre ter Stegen",
+    "position": "GK",
+    "attack": 15,
+    "midfield": 38,
+    "defense": 89,
+    "overall": 89
+  },
+  {
+    "id": "P034",
+    "name": "Gianluigi Donnarumma",
+    "position": "GK",
+    "attack": 12,
+    "midfield": 22,
+    "defense": 90,
+    "overall": 89
+  },
+  {
+    "id": "P035",
+    "name": "Jan Oblak",
+    "position": "GK",
+    "attack": 14,
+    "midfield": 18,
+    "defense": 90,
+    "overall": 89
+  },
+  {
+    "id": "P036",
+    "name": "Mike Maignan",
+    "position": "GK",
+    "attack": 18,
+    "midfield": 32,
+    "defense": 88,
+    "overall": 87
+  },
+  {
+    "id": "P037",
+    "name": "Josko Gvardiol",
+    "position": "DEF",
+    "attack": 58,
+    "midfield": 68,
+    "defense": 87,
+    "overall": 86
+  },
+  {
+    "id": "P038",
+    "name": "Theo Hernandez",
+    "position": "DEF",
+    "attack": 70,
+    "midfield": 74,
+    "defense": 83,
+    "overall": 86
+  },
+  {
+    "id": "P039",
+    "name": "Achraf Hakimi",
+    "position": "DEF",
+    "attack": 74,
+    "midfield": 75,
+    "defense": 81,
+    "overall": 85
+  },
+  {
+    "id": "P040",
+    "name": "Trent Alexander-Arnold",
+    "position": "DEF",
+    "attack": 72,
+    "midfield": 85,
+    "defense": 79,
+    "overall": 86
+  },
+  {
+    "id": "P041",
+    "name": "Gabriel Magalhaes",
+    "position": "DEF",
+    "attack": 35,
+    "midfield": 48,
+    "defense": 88,
+    "overall": 86
+  },
+  {
+    "id": "P042",
+    "name": "Ronald Araujo",
+    "position": "DEF",
+    "attack": 30,
+    "midfield": 42,
+    "defense": 89,
+    "overall": 86
+  },
+  {
+    "id": "P043",
+    "name": "Bernardo Silva",
+    "position": "MID",
+    "attack": 80,
+    "midfield": 90,
+    "defense": 64,
+    "overall": 88
+  },
+  {
+    "id": "P044",
+    "name": "Jamal Musiala",
+    "position": "MID",
+    "attack": 85,
+    "midfield": 89,
+    "defense": 46,
+    "overall": 88
+  },
+  {
+    "id": "P045",
+    "name": "Florian Wirtz",
+    "position": "MID",
+    "attack": 84,
+    "midfield": 89,
+    "defense": 48,
+    "overall": 88
+  },
+  {
+    "id": "P046",
+    "name": "Bruno Fernandes",
+    "position": "MID",
+    "attack": 82,
+    "midfield": 88,
+    "defense": 65,
+    "overall": 87
+  },
+  {
+    "id": "P047",
+    "name": "Frenkie de Jong",
+    "position": "MID",
+    "attack": 66,
+    "midfield": 88,
+    "defense": 74,
+    "overall": 87
+  },
+  {
+    "id": "P048",
+    "name": "Eduardo Camavinga",
+    "position": "MID",
+    "attack": 65,
+    "midfield": 84,
+    "defense": 82,
+    "overall": 85
+  },
+  {
+    "id": "P049",
+    "name": "Robert Lewandowski",
+    "position": "FWD",
+    "attack": 91,
+    "midfield": 65,
+    "defense": 36,
+    "overall": 88
+  },
+  {
+    "id": "P050",
+    "name": "Lautaro Martinez",
+    "position": "FWD",
+    "attack": 90,
+    "midfield": 70,
+    "defense": 42,
+    "overall": 89
+  },
+  {
+    "id": "P051",
+    "name": "Phil Foden",
+    "position": "FWD",
+    "attack": 88,
+    "midfield": 86,
+    "defense": 50,
+    "overall": 88
+  },
+  {
+    "id": "P052",
+    "name": "Antoine Griezmann",
+    "position": "FWD",
+    "attack": 87,
+    "midfield": 87,
+    "defense": 60,
+    "overall": 88
+  },
+  {
+    "id": "P053",
+    "name": "Son Heung-min",
+    "position": "FWD",
+    "attack": 89,
+    "midfield": 76,
+    "defense": 44,
+    "overall": 87
+  },
+  {
+    "id": "P054",
+    "name": "Cole Palmer",
+    "position": "FWD",
+    "attack": 87,
+    "midfield": 85,
+    "defense": 45,
+    "overall": 86
   }
 ]

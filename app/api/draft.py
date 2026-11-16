@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from app.models.game import CreateGameRequest, DraftRequest, GameState
+from app.models.game import CreateGameRequest, DraftRequest, GameState, UpdateFormationRequest
 from app.engine.player_tools import get_all_players
 from app.services.game_state import create_game, get_game, reset_game
 from app.services.draft_service import process_draft_pick
@@ -19,8 +19,22 @@ def api_create_game(request: CreateGameRequest):
         team_b_name=request.team_b_name or "Team Beta",
         formation_a=request.formation_a or "1-1-1-2",
         formation_b=request.formation_b or "1-1-1-2",
+        first_turn=request.first_turn or "A",
+        draft_mode=request.draft_mode or "alternating",
     )
     return game
+
+@router.post("/game/{game_id}/formation", response_model=GameState, summary="Update team formations")
+def api_update_formation(game_id: str, request: UpdateFormationRequest):
+    try:
+        game = get_game(game_id)
+        if request.formation_a:
+            game.teams["A"].formation = request.formation_a
+        if request.formation_b:
+            game.teams["B"].formation = request.formation_b
+        return game
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
 @router.get("/game/{game_id}", response_model=GameState, summary="Get current game state")
 def api_get_game(game_id: str):

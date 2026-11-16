@@ -42,10 +42,10 @@
                     <button id="nav-btn-draft" class="nav-tab-btn" onclick="switchTab('draft')">
                         <span>📋</span> Draft Arena
                     </button>
-                    <button id="nav-btn-analysis" class="nav-tab-btn" onclick="switchTab('analysis')">
+                    <button id="nav-btn-analysis" class="nav-tab-btn" onclick="switchTab('analysis')" style="display: none;">
                         <span>📊</span> Match Analysis
                     </button>
-                    <button id="nav-btn-whatif" class="nav-tab-btn" onclick="switchTab('whatif')">
+                    <button id="nav-btn-whatif" class="nav-tab-btn" onclick="switchTab('whatif')" style="display: none;">
                         <span>🧪</span> What-If Lab
                     </button>
                 </nav>
@@ -266,23 +266,6 @@
                 </div>
             </section>
 
-            <!-- Bottom CTA Banner -->
-            <section class="landing-cta-banner">
-                <h3 class="cta-banner-title">Ready To Test Your Tactical Instincts?</h3>
-                <p class="cta-banner-desc">
-                    Enter the Draft Arena to build your squad against a rival, or launch an instant demo match to
-                    experience the tactical analysis in action.
-                </p>
-                <div style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;">
-                    <button class="btn-hero-launch" onclick="switchTab('draft')">
-                        <span>🎮</span> Let's Get Started
-                    </button>
-                    <button class="btn-hero-demo" onclick="quickStartDemoMatch()">
-                        <span>⚡</span> Launch Instant Demo Match
-                    </button>
-                </div>
-            </section>
-
             <!-- Professional Modern Footer -->
             <footer class="landing-footer">
                 <div class="footer-top-row">
@@ -305,112 +288,235 @@
         </main>
 
         <!-- =================================================================
-             SCREEN 1: DRAFT ARENA
+             SCREEN 1: STEP-BY-STEP DRAFT ARENA
              ================================================================= -->
         <main id="screen-draft" class="app-screen" style="display: none;">
-            <!-- Setup & Configuration Bar -->
-            <section class="config-bar" aria-label="Match Configuration">
-                <div class="team-input-group">
-                    <div class="team-badge-circle team-badge-a">A</div>
-                    <input type="text" id="input-team-a-name" class="form-input" value="Team Alpha"
-                        placeholder="Team A Name">
-                    <select id="select-form-a" class="form-select">
-                        <option value="1-1-1-2" selected>1-1-1-2 (Aggressive)</option>
-                        <option value="1-1-2-1">1-1-2-1 (Balanced)</option>
-                        <option value="1-2-1-1">1-2-1-1 (Defensive)</option>
-                    </select>
+
+            <!-- STEP 1: TEAM NAMES SETUP STAGE -->
+            <section id="draft-stage-setup" class="wizard-stage-card">
+                <div class="stage-stepper">
+                    <span class="step-pill active">Step 1: Set Team Names</span>
+                    <span class="step-pill-divider">→</span>
+                    <span class="step-pill">Step 2: The Coin Toss</span>
+                    <span class="step-pill-divider">→</span>
+                    <span class="step-pill">Step 3: Snake Draft</span>
                 </div>
 
-                <div style="font-weight: 800; color: var(--text-muted); font-size: 0.9rem;">VS</div>
-
-                <div class="team-input-group">
-                    <div class="team-badge-circle team-badge-b">B</div>
-                    <input type="text" id="input-team-b-name" class="form-input" value="Team Beta"
-                        placeholder="Team B Name">
-                    <select id="select-form-b" class="form-select">
-                        <option value="1-1-1-2" selected>1-1-1-2 (Aggressive)</option>
-                        <option value="1-1-2-1">1-1-2-1 (Balanced)</option>
-                        <option value="1-2-1-1">1-2-1-1 (Defensive)</option>
-                    </select>
+                <div class="wizard-header">
+                    <h2 class="wizard-title">Create Your Matchup</h2>
+                    <p class="wizard-subtitle">Set custom team names before flipping the coin for the opening draft pick.</p>
                 </div>
 
-                <div style="display: flex; gap: 8px;">
-                    <button id="btn-start-game" class="btn-primary"><span>🎮</span> New Match</button>
-                    <button id="btn-reset-draft" class="btn-secondary"><span>↺</span> Reset</button>
-                </div>
-            </section>
-
-            <!-- Turn Status and Progress Bar -->
-            <section class="draft-status-banner" aria-label="Turn Indicator">
-                <div class="turn-indicator-box">
-                    <div id="turn-pulse-dot" class="turn-pulse-dot turn-pulse-a"></div>
-                    <div>
-                        <div class="turn-label">Current Action</div>
-                        <div id="turn-status-text" class="turn-title">Team Alpha's Pick (Turn A)</div>
-                    </div>
-                </div>
-
-                <div class="draft-progress-wrapper">
-                    <div>
-                        <span id="draft-progress-text" class="progress-text">0 / 10 Drafted</span>
-                        <div class="progress-bar-outer">
-                            <div id="draft-progress-bar" class="progress-bar-inner"></div>
+                <div class="team-setup-grid">
+                    <!-- Team A Setup Card -->
+                    <div class="team-setup-card team-setup-a">
+                        <div class="team-badge-circle team-badge-a" style="width:48px;height:48px;font-size:1.2rem;">A</div>
+                        <div class="team-setup-body">
+                            <label for="input-team-a-name" class="setup-label">Team 1 (Alpha)</label>
+                            <input type="text" id="input-team-a-name" class="form-input team-name-input" value="Team Alpha" placeholder="e.g. Real Madrid, Team Alpha">
+                            <div class="team-setup-hint">Color Theme: Cyan / Sky Blue</div>
                         </div>
                     </div>
-                    <button id="btn-proceed-analyze" class="btn-accent" disabled>
-                        <span>⚡</span> Analyze Match
+
+                    <div class="battle-vs-badge" style="width: 52px; height: 52px; font-size: 1.1rem;">VS</div>
+
+                    <!-- Team B Setup Card -->
+                    <div class="team-setup-card team-setup-b">
+                        <div class="team-badge-circle team-badge-b" style="width:48px;height:48px;font-size:1.2rem;">B</div>
+                        <div class="team-setup-body">
+                            <label for="input-team-b-name" class="setup-label">Team 2 (Beta)</label>
+                            <input type="text" id="input-team-b-name" class="form-input team-name-input" value="Team Beta" placeholder="e.g. Barcelona, Team Beta">
+                            <div class="team-setup-hint">Color Theme: Rose / Crimson</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wizard-actions">
+                    <button id="btn-proceed-toss" class="btn-primary btn-large-cta" onclick="proceedToTossStage()">
+                        <span>🪙</span> Proceed to Coin Toss →
                     </button>
                 </div>
             </section>
 
-            <!-- 3-Column Draft Board -->
-            <section class="draft-grid">
-                <!-- Left: Team A Roster -->
-                <div id="panel-team-a" class="team-panel active-turn">
-                    <div class="team-panel-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="team-badge-circle team-badge-a"
-                                style="width:24px;height:24px;font-size:0.75rem;">A</span>
-                            <span id="team-title-a" class="team-panel-title">Team Alpha</span>
+            <!-- STEP 2: COIN TOSS STAGE -->
+            <section id="draft-stage-toss" class="wizard-stage-card" style="display: none;">
+                <div class="stage-stepper">
+                    <span class="step-pill completed">✓ Step 1: Teams Set</span>
+                    <span class="step-pill-divider">→</span>
+                    <span class="step-pill active">Step 2: The Coin Toss</span>
+                    <span class="step-pill-divider">→</span>
+                    <span class="step-pill">Step 3: Snake Draft</span>
+                </div>
+
+                <div class="wizard-header">
+                    <h2 class="wizard-title">The Opening Coin Toss</h2>
+                    <p class="wizard-subtitle">Flip the coin to determine who gets the coveted first pick in the draft!</p>
+                </div>
+
+                <!-- 3D Coin Visualizer -->
+                <div class="toss-arena-container">
+                    <div class="coin-3d-wrapper">
+                        <div id="coin-flipper" class="coin-disc">
+                            <div class="coin-face coin-face-heads">
+                                <div id="coin-label-a" class="coin-team-text">TEAM ALPHA</div>
+                                <div class="coin-badge-sub">SIDE A</div>
+                            </div>
+                            <div class="coin-face coin-face-tails">
+                                <div id="coin-label-b" class="coin-team-text">TEAM BETA</div>
+                                <div class="coin-badge-sub">SIDE B</div>
+                            </div>
                         </div>
-                        <span id="team-form-badge-a" class="team-panel-formation">1-1-1-2</span>
                     </div>
-                    <div id="roster-list-a" class="roster-slots-list">
-                        <!-- 5 dynamic slots populated via draft.js -->
+
+                    <!-- Flip Action Button -->
+                    <button id="btn-flip-coin" class="btn-hero-launch" onclick="executeCoinToss()">
+                        <span>🪙</span> Flip Coin Now!
+                    </button>
+
+                    <!-- Toss Result Display -->
+                    <div id="toss-result-box" class="toss-result-card" style="display: none;">
+                        <div class="toss-result-icon">🏆</div>
+                        <h3 id="toss-winner-heading" class="toss-winner-title">Team Alpha Won the Toss!</h3>
+                        <p id="toss-winner-desc" class="toss-winner-desc">
+                            Team Alpha gets the 1st pick. Team Beta will pick 2 players consecutively in round 2 (Snake Draft).
+                        </p>
+                        <button id="btn-start-draft-after-toss" class="btn-primary btn-large-cta" onclick="startDraftAfterToss()">
+                            <span>⚔️</span> Enter Draft Arena →
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 3: SNAKE DRAFT ARENA STAGE -->
+            <section id="draft-stage-arena" style="display: none;">
+                <!-- Turn Status and Progress Bar -->
+                <div class="draft-status-banner" aria-label="Turn Indicator">
+                    <div class="turn-indicator-box">
+                        <div id="turn-pulse-dot" class="turn-pulse-dot turn-pulse-a"></div>
+                        <div>
+                            <div class="turn-label">Current Turn (Snake Order)</div>
+                            <div id="turn-status-text" class="turn-title">Team Alpha's Pick</div>
+                        </div>
+                    </div>
+
+                    <div class="draft-progress-wrapper">
+                        <div>
+                            <span id="draft-progress-text" class="progress-text">0 / 10 Drafted</span>
+                            <div class="progress-bar-outer">
+                                <div id="draft-progress-bar" class="progress-bar-inner"></div>
+                            </div>
+                        </div>
+                        <button id="btn-new-match-reset" class="btn-secondary" onclick="resetToTeamSetup()">
+                            <span>↺</span> Restart Match
+                        </button>
                     </div>
                 </div>
 
-                <!-- Center: Player Pool Catalog -->
-                <div class="player-pool-container">
-                    <div class="pool-controls-bar">
-                        <input type="text" id="player-search-input" class="form-input pool-search-input"
-                            placeholder="🔍 Search footballers...">
-                        <div class="pos-filter-group">
-                            <button class="filter-btn active" data-pos="ALL">ALL</button>
-                            <button class="filter-btn" data-pos="GK">GK</button>
-                            <button class="filter-btn" data-pos="DEF">DEF</button>
-                            <button class="filter-btn" data-pos="MID">MID</button>
-                            <button class="filter-btn" data-pos="FWD">FWD</button>
+                <!-- 3-Column Draft Board -->
+                <div class="draft-grid">
+                    <!-- Left: Team A Roster -->
+                    <div id="panel-team-a" class="team-panel active-turn">
+                        <div class="team-panel-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="team-badge-circle team-badge-a" style="width:24px;height:24px;font-size:0.75rem;">A</span>
+                                <span id="team-title-a" class="team-panel-title">Team Alpha</span>
+                            </div>
+                            <span id="team-picks-count-a" class="team-panel-formation">0 / 5</span>
+                        </div>
+                        <div id="roster-list-a" class="roster-slots-list">
+                            <!-- 5 dynamic slots populated via draft.js -->
                         </div>
                     </div>
 
-                    <div id="players-catalog-grid" class="players-catalog-grid">
-                        <!-- Populated by draft.js -->
+                    <!-- Center: Interactive 3-Card Random Draft Pack -->
+                    <div class="player-pool-container">
+                        <!-- Pack Selection Header -->
+                        <div class="candidate-pack-header">
+                            <div class="pack-heading-info">
+                                <div id="pack-turn-title" class="pack-title">Pick 1 of 3 Random Footballers</div>
+                                <p class="pack-subtitle">3 candidates drawn randomly from 54 world-class stars. Choose wisely for your squad!</p>
+                            </div>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button id="btn-shuffle-candidates" class="btn-secondary" onclick="shuffleRandomCandidates()" title="Get 3 new random candidates">
+                                    <span>🔀</span> Shuffle Choices
+                                </button>
+                                <button id="btn-toggle-catalog" class="btn-secondary" onclick="toggleFullCatalogView()">
+                                    <span>📋</span> <span id="toggle-catalog-text">Browse Full Pool</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 3 Random Candidate Cards Container -->
+                        <div id="random-candidates-grid" class="random-candidates-grid">
+                            <!-- Populated dynamically with 3 interactive player cards -->
+                        </div>
+
+                        <!-- Full Catalog (Toggleable) -->
+                        <div id="full-catalog-section" style="display: none; margin-top: 20px;">
+                            <div class="pool-controls-bar">
+                                <input type="text" id="player-search-input" class="form-input pool-search-input"
+                                    placeholder="🔍 Search all 54 footballers...">
+                                <div class="pos-filter-group">
+                                    <button class="filter-btn active" data-pos="ALL">ALL</button>
+                                    <button class="filter-btn" data-pos="GK">GK</button>
+                                    <button class="filter-btn" data-pos="DEF">DEF</button>
+                                    <button class="filter-btn" data-pos="MID">MID</button>
+                                    <button class="filter-btn" data-pos="FWD">FWD</button>
+                                </div>
+                            </div>
+                            <div id="players-catalog-grid" class="players-catalog-grid">
+                                <!-- Full catalog list -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Team B Roster -->
+                    <div id="panel-team-b" class="team-panel">
+                        <div class="team-panel-header">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="team-badge-circle team-badge-b" style="width:24px;height:24px;font-size:0.75rem;">B</span>
+                                <span id="team-title-b" class="team-panel-title">Team Beta</span>
+                            </div>
+                            <span id="team-picks-count-b" class="team-panel-formation">0 / 5</span>
+                        </div>
+                        <div id="roster-list-b" class="roster-slots-list">
+                            <!-- 5 dynamic slots populated via draft.js -->
+                        </div>
                     </div>
                 </div>
 
-                <!-- Right: Team B Roster -->
-                <div id="panel-team-b" class="team-panel">
-                    <div class="team-panel-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span class="team-badge-circle team-badge-b"
-                                style="width:24px;height:24px;font-size:0.75rem;">B</span>
-                            <span id="team-title-b" class="team-panel-title">Team Beta</span>
-                        </div>
-                        <span id="team-form-badge-b" class="team-panel-formation">1-1-1-2</span>
+                <!-- STEP 4: FORMATION SELECTION & CHECK RESULT (Appears when 10 players drafted) -->
+                <div id="draft-stage-formation-finish" class="formation-finish-banner" style="display: none;">
+                    <div class="finish-header">
+                        <div class="finish-badge">🎉 DRAFT COMPLETE</div>
+                        <h3 class="finish-title">Set Tactical Formations & Check Match Winner!</h3>
+                        <p class="finish-subtitle">Select the 5-player tactical shape for each squad before the final whistle analysis.</p>
                     </div>
-                    <div id="roster-list-b" class="roster-slots-list">
-                        <!-- 5 dynamic slots populated via draft.js -->
+
+                    <div class="formation-selectors-grid">
+                        <div class="formation-card-picker" style="border-color: rgba(56, 189, 248, 0.4);">
+                            <div class="picker-team-title" style="color: var(--team-a-accent);" id="form-label-a">Team Alpha Formation</div>
+                            <select id="select-form-a" class="form-select" style="width: 100%; margin-top: 8px;">
+                                <option value="1-1-1-2" selected>1-1-1-2 (Aggressive: 1 DEF, 1 MID, 2 FWD)</option>
+                                <option value="1-1-2-1">1-1-2-1 (Balanced: 1 DEF, 2 MID, 1 FWD)</option>
+                                <option value="1-2-1-1">1-2-1-1 (Defensive: 2 DEF, 1 MID, 1 FWD)</option>
+                            </select>
+                        </div>
+
+                        <div class="formation-card-picker" style="border-color: rgba(244, 63, 94, 0.4);">
+                            <div class="picker-team-title" style="color: var(--team-b-accent);" id="form-label-b">Team Beta Formation</div>
+                            <select id="select-form-b" class="form-select" style="width: 100%; margin-top: 8px;">
+                                <option value="1-1-1-2" selected>1-1-1-2 (Aggressive: 1 DEF, 1 MID, 2 FWD)</option>
+                                <option value="1-1-2-1">1-1-2-1 (Balanced: 1 DEF, 2 MID, 1 FWD)</option>
+                                <option value="1-2-1-1">1-2-1-1 (Defensive: 2 DEF, 1 MID, 1 FWD)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 24px;">
+                        <button id="btn-check-match-winner" class="btn-hero-launch btn-winner-glow" onclick="handleCheckMatchWinner()">
+                            <span>🏆</span> Check Match Winner & AI Analysis →
+                        </button>
                     </div>
                 </div>
             </section>
@@ -811,11 +917,29 @@
                 }
             }
 
+            if (tabName === "analysis" || tabName === "whatif") {
+                unlockAnalysisTabs();
+            }
+
             if (tabName === "whatif") {
                 prepareWhatIfLab();
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function unlockAnalysisTabs() {
+            const btnAnalysis = document.getElementById("nav-btn-analysis");
+            const btnWhatif = document.getElementById("nav-btn-whatif");
+            if (btnAnalysis) btnAnalysis.style.display = "inline-flex";
+            if (btnWhatif) btnWhatif.style.display = "inline-flex";
+        }
+
+        function lockAnalysisTabs() {
+            const btnAnalysis = document.getElementById("nav-btn-analysis");
+            const btnWhatif = document.getElementById("nav-btn-whatif");
+            if (btnAnalysis) btnAnalysis.style.display = "none";
+            if (btnWhatif) btnWhatif.style.display = "none";
         }
 
         // Real-time Hero Logistic Probability Math Preview

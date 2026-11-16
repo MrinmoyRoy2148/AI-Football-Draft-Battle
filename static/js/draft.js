@@ -1,25 +1,28 @@
 /**
  * AI Football Battle - Draft Module
- * Handles alternating draft interactions, player filtering, and team roster updates.
+ * Step-by-Step Experience:
+ * 1. Team Names Setup
+ * 2. Animated 3D Coin Toss (Determines 1st Pick)
+ * 3. Snake Draft with 3-Card Random Packs
+ * 4. Formation Selection & Match Result Verification
  */
 
 let allPlayersList = [];
 let currentGameData = null;
 let currentPosFilter = "ALL";
 let currentSearchTerm = "";
+let tossWinner = "A";
+let activeRandomCandidates = [];
+let isFullCatalogVisible = false;
 
-// Initialize Draft Screen on DOM Ready
+// Initialize on DOM Ready
 document.addEventListener("DOMContentLoaded", async () => {
     initDraftUI();
     await loadInitialData();
 });
 
 function initDraftUI() {
-    // New Match button
-    document.getElementById("btn-start-game")?.addEventListener("click", handleStartNewMatch);
-    document.getElementById("btn-reset-draft")?.addEventListener("click", handleResetDraft);
-
-    // Filter buttons
+    // Filter buttons for full catalog
     const filterButtons = document.querySelectorAll(".filter-btn");
     filterButtons.forEach(btn => {
         btn.addEventListener("click", (e) => {
@@ -30,55 +33,273 @@ function initDraftUI() {
         });
     });
 
-    // Search bar
+    // Search bar for full catalog
     const searchInput = document.getElementById("player-search-input");
     searchInput?.addEventListener("input", (e) => {
         currentSearchTerm = e.target.value.toLowerCase().trim();
         renderPlayerCatalog();
-    });
-
-    // Analyze Match button
-    document.getElementById("btn-proceed-analyze")?.addEventListener("click", () => {
-        switchTab("analysis");
-        triggerMatchAnalysis();
     });
 }
 
 async function loadInitialData() {
     try {
         allPlayersList = await fetchAllPlayers();
-        await handleStartNewMatch();
     } catch (err) {
         showToast("Error loading catalog: " + err.message);
     }
 }
 
-async function handleStartNewMatch() {
-    const teamAName = document.getElementById("input-team-a-name")?.value || "Team Alpha";
-    const teamBName = document.getElementById("input-team-b-name")?.value || "Team Beta";
-    const formA = document.getElementById("select-form-a")?.value || "1-1-1-2";
-    const formB = document.getElementById("select-form-b")?.value || "1-1-1-2";
+/**
+ * STEP 1: Proceed from Team Names to Coin Toss
+ */
+function proceedToTossStage() {
+    const teamAName = document.getElementById("input-team-a-name")?.value.trim() || "Team Alpha";
+    const teamBName = document.getElementById("input-team-b-name")?.value.trim() || "Team Beta";
+
+    // Update labels on the coin and toss stage
+    const coinLabelA = document.getElementById("coin-label-a");
+    const coinLabelB = document.getElementById("coin-label-b");
+    if (coinLabelA) coinLabelA.textContent = teamAName.toUpperCase();
+    if (coinLabelB) coinLabelB.textContent = teamBName.toUpperCase();
+
+    // Reset toss elements
+    const flipper = document.getElementById("coin-flipper");
+    if (flipper) {
+        flipper.className = "coin-disc";
+        flipper.style.transform = "rotateY(0deg)";
+    }
+    const resultBox = document.getElementById("toss-result-box");
+    if (resultBox) resultBox.style.display = "none";
+    const flipBtn = document.getElementById("btn-flip-coin");
+    if (flipBtn) {
+        flipBtn.disabled = false;
+        flipBtn.style.display = "inline-flex";
+    }
+
+    // Switch view
+    document.getElementById("draft-stage-setup").style.display = "none";
+    document.getElementById("draft-stage-toss").style.display = "block";
+    document.getElementById("draft-stage-arena").style.display = "none";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/**
+ * STEP 2: Execute Animated 3D Coin Toss
+ */
+function executeCoinToss() {
+    const flipBtn = document.getElementById("btn-flip-coin");
+    if (flipBtn) flipBtn.disabled = true;
+
+    const teamAName = document.getElementById("input-team-a-name")?.value.trim() || "Team Alpha";
+    const teamBName = document.getElementById("input-team-b-name")?.value.trim() || "Team Beta";
+
+    // Random winner: 50% chance
+    tossWinner = Math.random() < 0.5 ? "A" : "B";
+    const winningTeamName = tossWinner === "A" ? teamAName : teamBName;
+    const losingTeamName = tossWinner === "A" ? teamBName : teamAName;
+
+    const flipper = document.getElementById("coin-flipper");
+    if (flipper) {
+        flipper.classList.remove("coin-spinning-a", "coin-spinning-b");
+        // Trigger CSS reflow
+        void flipper.offsetWidth;
+        flipper.classList.add(tossWinner === "A" ? "coin-spinning-a" : "coin-spinning-b");
+    }
+
+    // Display winner after 1.8s spin
+    setTimeout(() => {
+        if (flipBtn) flipBtn.style.display = "none";
+
+        const resultBox = document.getElementById("toss-result-box");
+        const heading = document.getElementById("toss-winner-heading");
+        const desc = document.getElementById("toss-winner-desc");
+
+        if (heading) heading.textContent = `🎉 ${winningTeamName} Won the Toss!`;
+        if (desc) {
+            desc.innerHTML = `<strong>${winningTeamName}</strong> earns the 1st pick in the draft.<br>` +
+                             `<strong>${losingTeamName}</strong> will get 2 consecutive picks in round 2 (Snake Draft: 1-2-2-2-2-1).`;
+        }
+
+        if (resultBox) {
+            resultBox.style.display = "block";
+            resultBox.classList.add("fade-in");
+        }
+    }, 1800);
+}
+
+/**
+ * STEP 3: Start Snake Draft Arena
+ */
+async function startDraftAfterToss() {
+    const teamAName = document.getElementById("input-team-a-name")?.value.trim() || "Team Alpha";
+    const teamBName = document.getElementById("input-team-b-name")?.value.trim() || "Team Beta";
 
     try {
-        currentGameData = await createGameSession(teamAName, teamBName, formA, formB);
+        currentGameData = await createGameSession(
+            teamAName,
+            teamBName,
+            "1-1-1-2",
+            "1-1-1-2",
+            tossWinner,
+            "snake"
+        );
+
+        // Hide toss, reveal draft arena
+        document.getElementById("draft-stage-toss").style.display = "none";
+        document.getElementById("draft-stage-arena").style.display = "block";
+        document.getElementById("draft-stage-formation-finish").style.display = "none";
+
+        // Generate 3 random candidates
+        generateNewRandomCandidates();
         renderFullDraftView();
-        showToast("New Match session started! Team A drafts first.");
+
+        const firstTeamName = currentGameData.teams[tossWinner].name || `Team ${tossWinner}`;
+        showToast(`⚔️ Draft Started! ${firstTeamName} makes the opening pick.`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
-        showToast("Failed to start match: " + err.message);
+        showToast("Error creating game session: " + err.message);
     }
 }
 
-async function handleResetDraft() {
-    if (!currentGameData) return;
-    try {
-        currentGameData = await resetGameSession(currentGameData.game_id);
-        renderFullDraftView();
-        showToast("Draft session reset.");
-    } catch (err) {
-        showToast("Reset failed: " + err.message);
+/**
+ * Reset back to Stage 1 (Team Setup)
+ */
+function resetToTeamSetup() {
+    currentGameData = null;
+    tossWinner = "A";
+    activeRandomCandidates = [];
+    isFullCatalogVisible = false;
+
+    if (typeof lockAnalysisTabs === "function") {
+        lockAnalysisTabs();
+    }
+
+    document.getElementById("draft-stage-setup").style.display = "block";
+    document.getElementById("draft-stage-toss").style.display = "none";
+    document.getElementById("draft-stage-arena").style.display = "none";
+    document.getElementById("draft-stage-formation-finish").style.display = "none";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/**
+ * Deal 3 Random Undrafted Footballers
+ */
+function generateNewRandomCandidates() {
+    if (!currentGameData || !allPlayersList || allPlayersList.length === 0) return;
+
+    const draftedSet = new Set([
+        ...currentGameData.teams.A.player_ids,
+        ...currentGameData.teams.B.player_ids
+    ]);
+
+    const undrafted = allPlayersList.filter(p => !draftedSet.has(p.id));
+
+    if (undrafted.length === 0) {
+        activeRandomCandidates = [];
+        renderRandomCandidates();
+        return;
+    }
+
+    // Shuffle undrafted pool
+    const shuffled = [...undrafted].sort(() => 0.5 - Math.random());
+    activeRandomCandidates = shuffled.slice(0, Math.min(3, shuffled.length));
+
+    renderRandomCandidates();
+}
+
+function shuffleRandomCandidates() {
+    generateNewRandomCandidates();
+    showToast("🔀 New 3 candidate footballers drawn!");
+}
+
+function toggleFullCatalogView() {
+    const fullSec = document.getElementById("full-catalog-section");
+    const toggleText = document.getElementById("toggle-catalog-text");
+    if (!fullSec) return;
+
+    isFullCatalogVisible = !isFullCatalogVisible;
+    fullSec.style.display = isFullCatalogVisible ? "block" : "none";
+    if (toggleText) {
+        toggleText.textContent = isFullCatalogVisible ? "Hide Full Pool" : "Browse Full Pool";
+    }
+
+    if (isFullCatalogVisible) {
+        renderPlayerCatalog();
     }
 }
 
+/**
+ * Render 3 Random Candidate Cards
+ */
+function renderRandomCandidates() {
+    const container = document.getElementById("random-candidates-grid");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    if (currentGameData?.status === "completed") {
+        container.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 24px; color: var(--accent-emerald);">
+                <div style="font-size: 2rem;">✅</div>
+                <div style="font-weight: 800; font-size: 1.1rem; margin-top: 6px;">Draft Phase Complete!</div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Both teams have drafted 5 superstars. Choose formations below to proceed.</p>
+            </div>
+        `;
+        return;
+    }
+
+    const currentTurn = currentGameData?.current_turn || "A";
+    const teamName = currentGameData?.teams[currentTurn]?.name || `Team ${currentTurn}`;
+    const btnClass = currentTurn === "A" ? "btn-draft-a" : "btn-draft-b";
+
+    // Update pack turn title
+    const packTitle = document.getElementById("pack-turn-title");
+    if (packTitle) {
+        packTitle.innerHTML = `<span style="color: ${currentTurn === 'A' ? 'var(--team-a-accent)' : 'var(--team-b-accent)'}">${teamName}'s Pick</span>: Select 1 of 3 Footballers`;
+    }
+
+    activeRandomCandidates.forEach(player => {
+        const card = document.createElement("div");
+        card.className = "candidate-card";
+
+        const posClass = `pos-${player.position.toLowerCase()}`;
+
+        card.innerHTML = `
+            <div class="candidate-header">
+                <span class="pos-tag ${posClass}">${player.position}</span>
+                <span class="candidate-ovr">${player.overall}</span>
+            </div>
+            <div class="candidate-name">${player.name}</div>
+            <div class="candidate-bars-list">
+                <div class="candidate-bar-item">
+                    <span class="bar-lbl">ATT</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: ${player.attack}%; background: var(--accent-rose);"></div></div>
+                    <span class="bar-num">${player.attack}</span>
+                </div>
+                <div class="candidate-bar-item">
+                    <span class="bar-lbl">MID</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: ${player.midfield}%; background: var(--accent-emerald);"></div></div>
+                    <span class="bar-num">${player.midfield}</span>
+                </div>
+                <div class="candidate-bar-item">
+                    <span class="bar-lbl">DEF</span>
+                    <div class="bar-track"><div class="bar-fill" style="width: ${player.defense}%; background: var(--accent-blue);"></div></div>
+                    <span class="bar-num">${player.defense}</span>
+                </div>
+            </div>
+            <button class="candidate-draft-btn ${btnClass}" onclick="handleSelectPlayer('${player.id}')">
+                <span>➕</span> Draft for ${teamName}
+            </button>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+/**
+ * Handle Drafting a Player
+ */
 async function handleSelectPlayer(playerId) {
     if (!currentGameData || currentGameData.status !== "drafting") {
         return;
@@ -86,14 +307,65 @@ async function handleSelectPlayer(playerId) {
 
     try {
         currentGameData = await draftPlayerPick(currentGameData.game_id, playerId);
-        renderFullDraftView();
 
         if (currentGameData.status === "completed") {
-            showToast("Draft Complete! Click 'Analyze Match' to evaluate rosters.", 4000);
-            enableAnalysisButton();
+            // Reveal formation selection and check result stage
+            renderFullDraftView();
+            showFormationFinishStage();
+            showToast("🎉 Draft Complete! Both squads have 5 superstars. Set your formations below!", 4000);
+        } else {
+            // Deal 3 new candidate cards for next turn
+            generateNewRandomCandidates();
+            renderFullDraftView();
         }
     } catch (err) {
         showToast(err.message);
+    }
+}
+
+/**
+ * Reveal Step 4: Formation Selection
+ */
+function showFormationFinishStage() {
+    const finishSec = document.getElementById("draft-stage-formation-finish");
+    if (!finishSec) return;
+
+    finishSec.style.display = "block";
+    finishSec.classList.add("fade-in");
+
+    const labelA = document.getElementById("form-label-a");
+    const labelB = document.getElementById("form-label-b");
+    if (labelA) labelA.textContent = `${currentGameData.teams.A.name || "Team Alpha"} Tactical Formation`;
+    if (labelB) labelB.textContent = `${currentGameData.teams.B.name || "Team Beta"} Tactical Formation`;
+
+    finishSec.scrollIntoView({ behavior: "smooth" });
+}
+
+/**
+ * Check Match Winner & AI Analysis Action
+ */
+async function handleCheckMatchWinner() {
+    if (!currentGameData) return;
+
+    const formA = document.getElementById("select-form-a")?.value || "1-1-1-2";
+    const formB = document.getElementById("select-form-b")?.value || "1-1-1-2";
+
+    try {
+        showToast("⚙️ Locking tactical formations...", 1500);
+        await updateGameFormations(currentGameData.game_id, formA, formB);
+
+        // Unlock Analysis and What-If tabs in navigation header
+        if (typeof unlockAnalysisTabs === "function") {
+            unlockAnalysisTabs();
+        }
+
+        // Switch to Match Analysis screen and execute analysis
+        switchTab("analysis");
+        await triggerMatchAnalysis();
+
+        showToast("🏆 Match Analyzed! Win probabilities and tactical AI report live.", 4000);
+    } catch (err) {
+        showToast("Error evaluating match: " + err.message);
     }
 }
 
@@ -102,12 +374,10 @@ function renderFullDraftView() {
 
     renderTurnStatus();
     renderTeamPanels();
-    renderPlayerCatalog();
+    renderRandomCandidates();
 
-    if (currentGameData.status === "completed") {
-        enableAnalysisButton();
-    } else {
-        disableAnalysisButton();
+    if (isFullCatalogVisible) {
+        renderPlayerCatalog();
     }
 }
 
@@ -123,8 +393,13 @@ function renderTurnStatus() {
     if (progressFill) progressFill.style.width = `${progressPct}%`;
     if (progressText) progressText.textContent = `${draftedCount} / 10 Drafted`;
 
+    const countA = document.getElementById("team-picks-count-a");
+    const countB = document.getElementById("team-picks-count-b");
+    if (countA) countA.textContent = `${currentGameData.teams.A.player_ids.length} / 5`;
+    if (countB) countB.textContent = `${currentGameData.teams.B.player_ids.length} / 5`;
+
     if (currentGameData.status === "completed") {
-        if (turnEl) turnEl.textContent = "Draft Complete - Ready for Tactical Analysis";
+        if (turnEl) turnEl.textContent = "Draft Complete - Ready for Tactical Formations & Analysis";
         if (dotEl) {
             dotEl.className = "turn-pulse-dot";
             dotEl.style.background = "#10b981";
@@ -136,7 +411,23 @@ function renderTurnStatus() {
     const currentTurn = currentGameData.current_turn;
     const teamName = currentGameData.teams[currentTurn].name || `Team ${currentTurn}`;
 
-    if (turnEl) turnEl.textContent = `${teamName}'s Pick (Turn ${currentTurn})`;
+    // Calculate snake round status (e.g. pick 1 of 2 in a row)
+    const turnNumber = draftedCount + 1;
+    let turnDetail = "";
+    if (currentGameData.draft_mode === "snake" && currentGameData.draft_order) {
+        const order = currentGameData.draft_order;
+        const currentInOrder = order[draftedCount];
+        const nextInOrder = draftedCount + 1 < order.length ? order[draftedCount + 1] : null;
+        const prevInOrder = draftedCount > 0 ? order[draftedCount - 1] : null;
+
+        if (currentInOrder === nextInOrder) {
+            turnDetail = " (Pick 1 of 2 consecutive)";
+        } else if (currentInOrder === prevInOrder) {
+            turnDetail = " (Pick 2 of 2 consecutive)";
+        }
+    }
+
+    if (turnEl) turnEl.textContent = `Turn ${turnNumber}/10: ${teamName}'s Pick${turnDetail}`;
     if (dotEl) {
         dotEl.className = `turn-pulse-dot ${currentTurn === "A" ? "turn-pulse-a" : "turn-pulse-b"}`;
     }
@@ -157,11 +448,9 @@ function renderTeamPanels() {
 
 function renderSingleTeamPanel(teamKey, teamObj) {
     const titleEl = document.getElementById(`team-title-${teamKey.toLowerCase()}`);
-    const formEl = document.getElementById(`team-form-badge-${teamKey.toLowerCase()}`);
     const rosterListEl = document.getElementById(`roster-list-${teamKey.toLowerCase()}`);
 
     if (titleEl) titleEl.textContent = teamObj.name || `Team ${teamKey}`;
-    if (formEl) formEl.textContent = teamObj.formation;
 
     if (!rosterListEl) return;
     rosterListEl.innerHTML = "";
@@ -187,7 +476,7 @@ function renderSingleTeamPanel(teamKey, teamObj) {
             slotCard.innerHTML = `
                 <div class="roster-player-info">
                     <span class="pos-tag" style="background:rgba(255,255,255,0.1);color:#64748b;">Slot ${slot + 1}</span>
-                    <span class="roster-slot-empty">Awaiting draft...</span>
+                    <span class="roster-slot-empty">Awaiting pick...</span>
                 </div>
                 <span class="roster-slot-empty">-</span>
             `;
@@ -258,22 +547,6 @@ function renderPlayerCatalog() {
     });
 }
 
-function enableAnalysisButton() {
-    const btn = document.getElementById("btn-proceed-analyze");
-    if (btn) {
-        btn.disabled = false;
-        btn.classList.add("pulse-glow");
-    }
-}
-
-function disableAnalysisButton() {
-    const btn = document.getElementById("btn-proceed-analyze");
-    if (btn) {
-        btn.disabled = true;
-        btn.classList.remove("pulse-glow");
-    }
-}
-
 function showToast(message, duration = 3000) {
     const existing = document.querySelector(".toast-msg");
     if (existing) existing.remove();
@@ -298,17 +571,15 @@ async function quickStartDemoMatch() {
             allPlayersList = await fetchAllPlayers();
         }
 
-        // Create new session with exciting team identities
         currentGameData = await createGameSession(
             "Galácticos Alpha",
             "Legends Beta",
             "1-1-1-2",
-            "1-1-1-2"
+            "1-1-1-2",
+            "A",
+            "alternating"
         );
 
-        // Curated balanced draft picks:
-        // A: Courtois(GK), Van Dijk(DEF), De Bruyne(MID), Mbappe(FWD), Messi(FWD)
-        // B: Alisson(GK), Dias(DEF), Bellingham(MID), Haaland(FWD), Ronaldo(FWD)
         const demoDraftPicks = [
             "P001", "P002",
             "P006", "P007",
@@ -323,13 +594,15 @@ async function quickStartDemoMatch() {
 
         renderFullDraftView();
 
-        // Smoothly transition directly to Match Analysis
+        if (typeof unlockAnalysisTabs === "function") {
+            unlockAnalysisTabs();
+        }
+
         switchTab("analysis");
         await triggerMatchAnalysis();
 
-        showToast("🌟 Instant Match Draft Complete! AI Tactical Analyst is live.", 4000);
+        showToast("🌟 Instant Match Demo Active! AI Tactical Breakdown is live.", 4000);
     } catch (err) {
         showToast("Quick Match Demo Error: " + err.message);
     }
 }
-

@@ -40,10 +40,19 @@ async function fetchAllPlayers() {
 }
 
 // Game session management
-async function createGameSession(teamAName = "Team Alpha", teamBName = "Team Beta", formationA = "1-1-1-2", formationB = "1-1-1-2") {
+async function createGameSession(teamAName = "Team Alpha", teamBName = "Team Beta", formationA = "1-1-1-2", formationB = "1-1-1-2", firstTurn = "A", draftMode = "snake") {
     return await apiRequest("/game/create", "POST", {
         team_a_name: teamAName,
         team_b_name: teamBName,
+        formation_a: formationA,
+        formation_b: formationB,
+        first_turn: firstTurn,
+        draft_mode: draftMode
+    });
+}
+
+async function updateGameFormations(gameId, formationA, formationB) {
+    return await apiRequest(`/game/${gameId}/formation`, "POST", {
         formation_a: formationA,
         formation_b: formationB
     });

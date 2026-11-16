@@ -20,6 +20,8 @@ class GameState(BaseModel):
     current_turn: Turn = "A"
     draft_round: int = 1
     status: GameStatus = "drafting"
+    draft_mode: Literal["alternating", "snake"] = "alternating"
+    draft_order: Optional[list[str]] = None
     last_drafted_player_id: Optional[str] = None
     last_drafted_by: Optional[str] = None
 
@@ -29,6 +31,12 @@ class CreateGameRequest(BaseModel):
     team_b_name: Optional[str] = "Team Beta"
     formation_a: Optional[str] = "1-1-1-2"
     formation_b: Optional[str] = "1-1-1-2"
+    first_turn: Optional[Turn] = "A"
+    draft_mode: Optional[Literal["alternating", "snake"]] = "alternating"
+
+class UpdateFormationRequest(BaseModel):
+    formation_a: Optional[str] = None
+    formation_b: Optional[str] = None
 
 class DraftRequest(BaseModel):
     game_id: str

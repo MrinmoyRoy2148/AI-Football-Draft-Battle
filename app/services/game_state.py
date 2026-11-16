@@ -12,6 +12,8 @@ def create_game(
     team_b_name: str = "Team Beta",
     formation_a: str = DEFAULT_FORMATION,
     formation_b: str = DEFAULT_FORMATION,
+    first_turn: str = "A",
+    draft_mode: str = "alternating",
 ) -> GameState:
     """Initializes and stores a fresh two-player drafting session."""
     if not game_id:
@@ -21,6 +23,16 @@ def create_game(
     all_players = get_all_players()
     available_ids = list(all_players.keys())
 
+    if draft_mode == "snake":
+        if first_turn == "B":
+            draft_order = ["B", "A", "A", "B", "B", "A", "A", "B", "B", "A"]
+        else:
+            draft_order = ["A", "B", "B", "A", "A", "B", "B", "A", "A", "B"]
+        starting_turn = draft_order[0]
+    else:
+        draft_order = None
+        starting_turn = first_turn
+
     game = GameState(
         game_id=game_id,
         teams={
@@ -28,9 +40,11 @@ def create_game(
             "B": Team(team_id="B", name=team_b_name, player_ids=[], formation=formation_b),
         },
         available_player_ids=available_ids,
-        current_turn="A",
+        current_turn=starting_turn,
         draft_round=1,
         status="drafting",
+        draft_mode=draft_mode,
+        draft_order=draft_order,
     )
     _GAMES[game_id] = game
     return game
