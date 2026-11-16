@@ -284,8 +284,8 @@ function renderRandomCandidates() {
                     <span class="bar-num">${player.defense}</span>
                 </div>
             </div>
-            <button class="candidate-draft-btn ${btnClass}" onclick="handleSelectPlayer('${player.id}')">
-                <span>➕</span> Draft for ${teamName}
+            <button class="candidate-draft-btn ${btnClass}" onclick="handleSelectPlayer('${player.id}')" title="Draft ${player.name} for ${teamName}">
+                <span>➕</span> Draft Player
             </button>
         `;
 

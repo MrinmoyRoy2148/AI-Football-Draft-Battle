@@ -532,19 +532,24 @@ h1, h2, h3, h4, .brand-title {
 
 .random-candidates-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
     margin-bottom: 20px;
+    align-items: stretch;
 }
 
 .candidate-card {
     background: linear-gradient(145deg, rgba(24, 32, 54, 0.95), rgba(15, 23, 42, 0.95));
     border: 1px solid rgba(56, 189, 248, 0.35);
     border-radius: var(--radius-md);
-    padding: 20px;
+    padding: 20px 18px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
     transition: all 0.25s ease;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
     animation: fadeIn 0.3s ease;
@@ -560,6 +565,7 @@ h1, h2, h3, h4, .brand-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 6px;
 }
 
 .candidate-ovr {
@@ -572,13 +578,17 @@ h1, h2, h3, h4, .brand-title {
 
 .candidate-name {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 800;
     color: #ffffff;
-    margin: 12px 0 14px;
+    margin: 8px 0 14px;
+    height: 1.5em;
+    line-height: 1.5em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .candidate-bars-list {
@@ -594,6 +604,7 @@ h1, h2, h3, h4, .brand-title {
     gap: 8px;
     font-size: 0.75rem;
     font-weight: 700;
+    height: 18px;
 }
 
 .bar-lbl {
@@ -622,17 +633,25 @@ h1, h2, h3, h4, .brand-title {
 
 .candidate-draft-btn {
     width: 100%;
-    padding: 10px;
+    height: 44px;
+    min-height: 44px;
+    max-height: 44px;
+    padding: 0 10px;
     border-radius: 10px;
     font-weight: 700;
     font-family: 'Outfit', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.84rem;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: auto;
+    box-sizing: border-box;
     transition: var(--transition-smooth);
 }
 
@@ -1102,6 +1121,8 @@ h1, h2, h3, h4, .brand-title {
     position: relative;
     cursor: pointer;
     transition: var(--transition-smooth);
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .player-card:hover:not(.drafted) {
