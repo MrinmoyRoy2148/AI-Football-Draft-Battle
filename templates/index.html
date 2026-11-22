@@ -67,12 +67,6 @@
                         simulate live squad synergy & win probabilities, and receive tactical AI match commentary to outsmart your opponent.
                     </p>
 
-                    <!-- Pass & Play Explanation Pill -->
-                    <div class="hero-mode-callout">
-                        <span class="mode-badge-icon">👥</span>
-                        <span><strong>2-Player Pass & Play:</strong> Play together on this device, or test dream squads solo!</span>
-                    </div>
-
                     <div class="hero-actions">
                         <button class="btn-hero-launch" onclick="switchTab('draft')">
                             <span>🎮</span> Let's Get Started
@@ -312,22 +306,13 @@
                     <p class="wizard-subtitle">Set custom squad names before flipping the coin for the opening draft pick.</p>
                 </div>
 
-                <!-- Friendly Pass & Play Format Notice -->
-                <div class="pass-and-play-alert">
-                    <div class="pass-icon">👥</div>
-                    <div class="pass-text">
-                        <strong>Pass & Play Mode (Shared Device):</strong>
-                        <span>Take turns choosing players on this same screen with a friend, or play both sides to test dream formations!</span>
-                    </div>
-                </div>
-
                 <div class="team-setup-grid">
                     <!-- Team A Setup Card -->
                     <div class="team-setup-card team-setup-a">
                         <div class="team-badge-circle team-badge-a" style="width:48px;height:48px;font-size:1.2rem;">A</div>
                         <div class="team-setup-body">
-                            <label for="input-team-a-name" class="setup-label">Player 1 Squad (Alpha)</label>
-                            <input type="text" id="input-team-a-name" class="form-input team-name-input" value="Team Alpha" placeholder="e.g. Real Madrid, Player 1">
+                            <label for="input-team-a-name" class="setup-label">Team 1 Name</label>
+                            <input type="text" id="input-team-a-name" class="form-input team-name-input" value="Team Alpha" placeholder="e.g. Real Madrid">
                             <div class="team-setup-hint">Color Theme: Cyan / Sky Blue</div>
                         </div>
                     </div>
@@ -338,8 +323,8 @@
                     <div class="team-setup-card team-setup-b">
                         <div class="team-badge-circle team-badge-b" style="width:48px;height:48px;font-size:1.2rem;">B</div>
                         <div class="team-setup-body">
-                            <label for="input-team-b-name" class="setup-label">Player 2 Squad (Beta)</label>
-                            <input type="text" id="input-team-b-name" class="form-input team-name-input" value="Team Beta" placeholder="e.g. Barcelona, Player 2">
+                            <label for="input-team-b-name" class="setup-label">Team 2 Name</label>
+                            <input type="text" id="input-team-b-name" class="form-input team-name-input" value="Team Beta" placeholder="e.g. Barcelona">
                             <div class="team-setup-hint">Color Theme: Rose / Crimson</div>
                         </div>
                     </div>
@@ -364,7 +349,7 @@
 
                 <div class="wizard-header">
                     <h2 class="wizard-title">The Opening Coin Toss</h2>
-                    <p class="wizard-subtitle">Flip the coin to determine who gets the coveted first pick in the draft!</p>
+                    <p class="wizard-subtitle">Flip to determine who gets the first pick in the draft.</p>
                 </div>
 
                 <!-- 3D Coin Visualizer -->
@@ -373,11 +358,9 @@
                         <div id="coin-flipper" class="coin-disc">
                             <div class="coin-face coin-face-heads">
                                 <div id="coin-label-a" class="coin-team-text">TEAM ALPHA</div>
-                                <div class="coin-badge-sub">SIDE A</div>
                             </div>
                             <div class="coin-face coin-face-tails">
                                 <div id="coin-label-b" class="coin-team-text">TEAM BETA</div>
-                                <div class="coin-badge-sub">SIDE B</div>
                             </div>
                         </div>
                     </div>
@@ -391,9 +374,7 @@
                     <div id="toss-result-box" class="toss-result-card" style="display: none;">
                         <div class="toss-result-icon">🏆</div>
                         <h3 id="toss-winner-heading" class="toss-winner-title">Team Alpha Won the Toss!</h3>
-                        <p id="toss-winner-desc" class="toss-winner-desc">
-                            Team Alpha gets the 1st pick. Team Beta will pick 2 players consecutively in round 2 (Snake Draft).
-                        </p>
+                        <p id="toss-winner-desc" class="toss-winner-desc"></p>
                         <button id="btn-start-draft-after-toss" class="btn-primary btn-large-cta" onclick="startDraftAfterToss()">
                             <span>⚔️</span> Enter Draft Arena →
                         </button>
@@ -408,7 +389,7 @@
                     <div class="turn-indicator-box">
                         <div id="turn-pulse-dot" class="turn-pulse-dot turn-pulse-a"></div>
                         <div>
-                            <div class="turn-label">Current Turn (Snake Order)</div>
+                            <div class="turn-label">Current Turn</div>
                             <div id="turn-status-text" class="turn-title">Team Alpha's Pick</div>
                         </div>
                     </div>
@@ -444,20 +425,10 @@
 
                     <!-- Center: Interactive 3-Card Random Draft Pack -->
                     <div class="player-pool-container">
-                        <!-- Live In-Draft Coach Bar -->
-                        <div id="draft-coach-bar" class="draft-coach-bar">
-                            <div class="coach-icon-pill">💡</div>
-                            <div class="coach-content">
-                                <div id="coach-turn-prompt" class="coach-turn-text"><strong>Player 1's Turn:</strong> Pick 1 of 3 candidate footballers below to draft into your squad.</div>
-                                <div class="coach-sub-tip">Target: 1 GK + 4 Outfielders (DEF/MID/FWD) for optimal chemistry &amp; synergy.</div>
-                            </div>
-                        </div>
-
                         <!-- Pack Selection Header -->
                         <div class="candidate-pack-header">
                             <div class="pack-heading-info">
-                                <div id="pack-turn-title" class="pack-title">Pick 1 of 3 Random Footballers</div>
-                                <p class="pack-subtitle">3 candidates drawn randomly from 54 world-class stars. Choose wisely for your squad!</p>
+                                <div id="pack-turn-title" class="pack-title">Available Candidates</div>
                             </div>
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <button id="btn-shuffle-candidates" class="btn-secondary" onclick="shuffleRandomCandidates()" title="Get 3 new random candidates">
@@ -962,12 +933,18 @@
         // How to Play Modal Controls
         function openHowToPlayModal() {
             const m = document.getElementById("modal-how-to-play");
-            if (m) m.style.display = "flex";
+            if (m) {
+                m.style.display = "flex";
+                document.body.style.overflow = "hidden";
+            }
         }
 
         function closeHowToPlayModal() {
             const m = document.getElementById("modal-how-to-play");
-            if (m) m.style.display = "none";
+            if (m) {
+                m.style.display = "none";
+                document.body.style.overflow = "";
+            }
         }
 
         document.addEventListener("keydown", function (e) {
@@ -976,7 +953,7 @@
     </script>
 
     <!-- =================================================================
-         HOW TO PLAY MODAL (Pass & Play Quick Guide)
+         GAME RULES & HOW TO PLAY MODAL
          ================================================================= -->
     <div id="modal-how-to-play" class="modal-overlay" style="display: none;" onclick="if(event.target===this) closeHowToPlayModal()">
         <div class="modal-card">
@@ -984,57 +961,48 @@
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <span style="font-size: 1.6rem;">📖</span>
                     <div>
-                        <h3 class="modal-title">How To Play AI Football Battle</h3>
-                        <p class="modal-subtitle">Quick 30-Second Guide to Mastering the Draft</p>
+                        <h3 class="modal-title">Game Rules &amp; Match Guide</h3>
+                        <p class="modal-subtitle">Official Guide to Drafting, Strategy &amp; Victory</p>
                     </div>
                 </div>
                 <button class="modal-close-btn" onclick="closeHowToPlayModal()" title="Close Guide" aria-label="Close Guide">&times;</button>
             </div>
 
             <div class="modal-body">
-                <!-- Mode explanation badge -->
-                <div class="modal-format-box">
-                    <span class="format-badge">👥 2-Player Pass & Play</span>
-                    <p class="format-desc">
-                        Play with a friend on this same screen or device, taking turns picking players. Or play solo to experiment with winning tactical combinations!
-                    </p>
-                </div>
-
-                <!-- 4 Steps Walkthrough -->
                 <div class="modal-steps-grid">
                     <div class="modal-step-item">
-                        <div class="step-badge">Step 1</div>
+                        <div class="step-badge">1. Setup</div>
                         <div class="step-icon">🪙</div>
-                        <div class="step-name">The Coin Toss</div>
-                        <p class="step-desc">Enter custom squad names and flip the 3D coin. The winner gets the opening draft pick.</p>
+                        <div class="step-name">Coin Toss</div>
+                        <p class="step-desc">Enter names for Team 1 and Team 2, then flip the coin to determine who receives the opening draft pick.</p>
                     </div>
 
                     <div class="modal-step-item">
-                        <div class="step-badge">Step 2</div>
+                        <div class="step-badge">2. Draft</div>
                         <div class="step-icon">🎴</div>
-                        <div class="step-name">3-Card Snake Draft</div>
-                        <p class="step-desc">On each turn, 3 random superstar cards appear. Choose 1 to recruit. The draft snakes (1 - 2 - 2 - 2 - 2 - 1) so both get 5 picks!</p>
+                        <div class="step-name">Snake Selection</div>
+                        <p class="step-desc">Teams alternate picking from 3 randomly drawn superstar cards in a snake format (1 - 2 - 2 - 2 - 2 - 1) until both squads have 5 players.</p>
                     </div>
 
                     <div class="modal-step-item">
-                        <div class="step-badge">Step 3</div>
+                        <div class="step-badge">3. Strategy</div>
                         <div class="step-icon">🛡️</div>
-                        <div class="step-name">Squad Chemistry</div>
-                        <p class="step-desc">Target <strong>1 Goalkeeper</strong> and <strong>4 Outfielders</strong> (DEF, MID, FWD). Keep attack and defense balanced!</p>
+                        <div class="step-name">Squad Balance</div>
+                        <p class="step-desc">Draft 1 Goalkeeper and 4 Outfielders (DEF, MID, FWD). Balancing Attack, Midfield, and Defense ratings maximizes your squad balance rating.</p>
                     </div>
 
                     <div class="modal-step-item">
-                        <div class="step-badge">Step 4</div>
+                        <div class="step-badge">4. Verdict</div>
                         <div class="step-icon">🏆</div>
-                        <div class="step-name">Formation & AI Verdict</div>
-                        <p class="step-desc">Pick your 5-player formation shape. The tactical engine and AI analyst determine the winner and key matchups!</p>
+                        <div class="step-name">Formations &amp; AI Analysis</div>
+                        <p class="step-desc">Select your tactical shape (Aggressive, Balanced, or Defensive). The engine calculates win probabilities and the AI Game Analyst generates deep match commentary.</p>
                     </div>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button class="btn-primary btn-large-cta" onclick="closeHowToPlayModal(); switchTab('draft');">
-                    <span>🎮</span> Got It — Start Playing!
+                <button class="btn-primary btn-large-cta" onclick="closeHowToPlayModal()">
+                    <span>✕</span> Close Guide
                 </button>
             </div>
         </div>

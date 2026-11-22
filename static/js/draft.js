@@ -117,8 +117,7 @@ function executeCoinToss() {
 
         if (heading) heading.textContent = `🎉 ${winningTeamName} Won the Toss!`;
         if (desc) {
-            desc.innerHTML = `<strong>${winningTeamName}</strong> earns the 1st pick in the draft.<br>` +
-                             `<strong>${losingTeamName}</strong> will get 2 consecutive picks in round 2 (Snake Draft: 1-2-2-2-2-1).`;
+            desc.innerHTML = `<strong>${winningTeamName}</strong> gets the opening pick in the draft.`;
         }
 
         if (resultBox) {
@@ -396,41 +395,16 @@ function renderTurnStatus() {
             dotEl.style.background = "#10b981";
             dotEl.style.boxShadow = "0 0 15px #10b981";
         }
-        const coachPrompt = document.getElementById("coach-turn-prompt");
-        if (coachPrompt) {
-            coachPrompt.innerHTML = "🎉 <strong>Draft Completed!</strong> Scroll down to choose formations and reveal the match winner!";
-        }
         return;
     }
 
     const currentTurn = currentGameData.current_turn;
     const teamName = currentGameData.teams[currentTurn].name || `Team ${currentTurn}`;
-
-    // Calculate snake round status (e.g. pick 1 of 2 in a row)
     const turnNumber = draftedCount + 1;
-    let turnDetail = "";
-    if (currentGameData.draft_mode === "snake" && currentGameData.draft_order) {
-        const order = currentGameData.draft_order;
-        const currentInOrder = order[draftedCount];
-        const nextInOrder = draftedCount + 1 < order.length ? order[draftedCount + 1] : null;
-        const prevInOrder = draftedCount > 0 ? order[draftedCount - 1] : null;
 
-        if (currentInOrder === nextInOrder) {
-            turnDetail = " (Pick 1 of 2 consecutive)";
-        } else if (currentInOrder === prevInOrder) {
-            turnDetail = " (Pick 2 of 2 consecutive)";
-        }
-    }
-
-    if (turnEl) turnEl.textContent = `Turn ${turnNumber}/10: ${teamName}'s Pick${turnDetail}`;
+    if (turnEl) turnEl.textContent = `Turn ${turnNumber} of 10: ${teamName}'s Pick`;
     if (dotEl) {
         dotEl.className = `turn-pulse-dot ${currentTurn === "A" ? "turn-pulse-a" : "turn-pulse-b"}`;
-    }
-
-    const coachPrompt = document.getElementById("coach-turn-prompt");
-    if (coachPrompt) {
-        const playerLabel = currentTurn === "A" ? "Player 1" : "Player 2";
-        coachPrompt.innerHTML = `👉 <strong>${teamName} (${playerLabel})'s Turn:</strong> Select 1 candidate footballer below to recruit${turnDetail}.`;
     }
 
     // Active panel borders
@@ -607,11 +581,17 @@ async function quickStartDemoMatch() {
 // Global modal triggers for How To Play
 window.openHowToPlayModal = function() {
     const m = document.getElementById("modal-how-to-play");
-    if (m) m.style.display = "flex";
+    if (m) {
+        m.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    }
 };
 
 window.closeHowToPlayModal = function() {
     const m = document.getElementById("modal-how-to-play");
-    if (m) m.style.display = "none";
+    if (m) {
+        m.style.display = "none";
+        document.body.style.overflow = "";
+    }
 };
 

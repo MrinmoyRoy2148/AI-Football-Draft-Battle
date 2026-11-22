@@ -2363,97 +2363,26 @@ h1, h2, h3, h4, .brand-title {
     box-shadow: 0 6px 20px rgba(56, 189, 248, 0.2);
 }
 
-/* Pass & Play Alert Banner in Matchup Setup */
-.pass-and-play-alert {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    max-width: 650px;
-    margin: 0 auto 24px auto;
-    padding: 12px 18px;
-    background: rgba(56, 189, 248, 0.08);
-    border: 1px solid rgba(56, 189, 248, 0.25);
-    border-radius: var(--radius-md);
-    color: #cbd5e1;
-    font-size: 0.88rem;
-    line-height: 1.45;
-    text-align: left;
-}
-
-.pass-and-play-alert .pass-icon {
-    font-size: 1.6rem;
-    flex-shrink: 0;
-}
-
-.pass-and-play-alert strong {
-    color: #38bdf8;
-    display: block;
-    margin-bottom: 2px;
-}
-
-/* In-Draft Live Coach Bar */
-.draft-coach-bar {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 18px;
-    padding: 12px 18px;
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    border-radius: var(--radius-md);
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
-}
-
-.coach-icon-pill {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(56, 189, 248, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-}
-
-.coach-content {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    text-align: left;
-}
-
-.coach-turn-text {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #f8fafc;
-}
-
-.coach-turn-text strong {
-    color: var(--accent-cyan);
-}
-
-.coach-sub-tip {
-    font-size: 0.78rem;
-    color: #94a3b8;
-}
-
-/* Modal Overlay & Card */
+/* Modal Window Dialog Overlay */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(5, 11, 22, 0.82);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: 20px;
-    animation: fadeInModal 0.25s ease-out;
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(4, 8, 18, 0.85) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important;
+    padding: 24px !important;
+    box-sizing: border-box !important;
+    animation: fadeInModal 0.22s ease-out;
 }
 
 @keyframes fadeInModal {
@@ -2466,22 +2395,29 @@ h1, h2, h3, h4, .brand-title {
 }
 
 .modal-card {
-    background: linear-gradient(145deg, #0f172a, #1e293b);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #0f172a;
+    border: 1px solid rgba(56, 189, 248, 0.35);
     border-radius: var(--radius-lg);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(56, 189, 248, 0.1);
-    max-width: 680px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(56, 189, 248, 0.15);
+    max-width: 720px;
     width: 100%;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
-    animation: scaleUpModal 0.25s ease-out;
+    position: relative;
+    margin: auto;
+    animation: scaleUpModal 0.22s ease-out;
 }
 
 @keyframes scaleUpModal {
     from {
-        transform: scale(0.95);
+        transform: scale(0.96);
+        opacity: 0.8;
     }
     to {
         transform: scale(1);
+        opacity: 1;
     }
 }
 
@@ -2501,7 +2437,7 @@ h1, h2, h3, h4, .brand-title {
 }
 
 .modal-subtitle {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
     margin-top: 2px;
 }
@@ -2527,33 +2463,8 @@ h1, h2, h3, h4, .brand-title {
     padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    max-height: 70vh;
+    gap: 16px;
     overflow-y: auto;
-}
-
-.modal-format-box {
-    background: rgba(16, 185, 129, 0.08);
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
-}
-
-.format-badge {
-    display: inline-block;
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: #34d399;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 4px;
-}
-
-.format-desc {
-    font-size: 0.85rem;
-    color: #cbd5e1;
-    line-height: 1.45;
-    margin: 0;
 }
 
 .modal-steps-grid {
