@@ -396,6 +396,10 @@ function renderTurnStatus() {
             dotEl.style.background = "#10b981";
             dotEl.style.boxShadow = "0 0 15px #10b981";
         }
+        const coachPrompt = document.getElementById("coach-turn-prompt");
+        if (coachPrompt) {
+            coachPrompt.innerHTML = "🎉 <strong>Draft Completed!</strong> Scroll down to choose formations and reveal the match winner!";
+        }
         return;
     }
 
@@ -421,6 +425,12 @@ function renderTurnStatus() {
     if (turnEl) turnEl.textContent = `Turn ${turnNumber}/10: ${teamName}'s Pick${turnDetail}`;
     if (dotEl) {
         dotEl.className = `turn-pulse-dot ${currentTurn === "A" ? "turn-pulse-a" : "turn-pulse-b"}`;
+    }
+
+    const coachPrompt = document.getElementById("coach-turn-prompt");
+    if (coachPrompt) {
+        const playerLabel = currentTurn === "A" ? "Player 1" : "Player 2";
+        coachPrompt.innerHTML = `👉 <strong>${teamName} (${playerLabel})'s Turn:</strong> Select 1 candidate footballer below to recruit${turnDetail}.`;
     }
 
     // Active panel borders
@@ -593,3 +603,15 @@ async function quickStartDemoMatch() {
         showToast("Quick Match Demo Error: " + err.message);
     }
 }
+
+// Global modal triggers for How To Play
+window.openHowToPlayModal = function() {
+    const m = document.getElementById("modal-how-to-play");
+    if (m) m.style.display = "flex";
+};
+
+window.closeHowToPlayModal = function() {
+    const m = document.getElementById("modal-how-to-play");
+    if (m) m.style.display = "none";
+};
+

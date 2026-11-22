@@ -18,7 +18,32 @@ function initWhatIfUI() {
 
 function prepareWhatIfLab() {
     if (!currentGameData) return;
+    updateWhatIfTeamSelectOptions();
     populateWhatIfPlayerSelectors();
+}
+
+function updateWhatIfTeamSelectOptions() {
+    const teamSelect = document.getElementById("whatif-select-team");
+    if (!teamSelect || !currentGameData || !currentGameData.teams) return;
+
+    const currentVal = teamSelect.value || "A";
+    const nameA = currentGameData.teams.A?.name || "Team Alpha";
+    const nameB = currentGameData.teams.B?.name || "Team Beta";
+
+    teamSelect.innerHTML = "";
+
+    const optA = document.createElement("option");
+    optA.value = "A";
+    optA.textContent = nameA;
+    if (currentVal === "A") optA.selected = true;
+
+    const optB = document.createElement("option");
+    optB.value = "B";
+    optB.textContent = nameB;
+    if (currentVal === "B") optB.selected = true;
+
+    teamSelect.appendChild(optA);
+    teamSelect.appendChild(optB);
 }
 
 function populateWhatIfPlayerSelectors() {
@@ -26,6 +51,13 @@ function populateWhatIfPlayerSelectors() {
 
     const teamKey = document.getElementById("whatif-select-team")?.value || "A";
     const targetTeam = currentGameData.teams[teamKey];
+    if (!targetTeam) return;
+
+    // Sync formation selector to the selected squad's current formation
+    const formSelect = document.getElementById("whatif-select-form");
+    if (formSelect && targetTeam.formation) {
+        formSelect.value = targetTeam.formation;
+    }
 
     const outSelect = document.getElementById("whatif-select-out");
     const inSelect = document.getElementById("whatif-select-in");
@@ -160,6 +192,12 @@ function renderWhatIfResults(data) {
 function resetWhatIfResults() {
     const resultsContainer = document.getElementById("whatif-results-container");
     if (resultsContainer) resultsContainer.style.display = "none";
+    updateWhatIfTeamSelectOptions();
     populateWhatIfPlayerSelectors();
     showToast("What-If parameters reset.");
 }
+
+// Expose globally for external calls
+window.prepareWhatIfLab = prepareWhatIfLab;
+window.updateWhatIfTeamSelectOptions = updateWhatIfTeamSelectOptions;
+
