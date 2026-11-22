@@ -284,7 +284,7 @@ function renderRandomCandidates() {
                 </div>
             </div>
             <button class="candidate-draft-btn ${btnClass}" onclick="handleSelectPlayer('${player.id}')" title="Draft ${player.name} for ${teamName}">
-                <span>➕</span> Draft Player
+                <span>➕</span> Draft for ${teamName}
             </button>
         `;
 
@@ -510,7 +510,7 @@ function renderPlayerCatalog() {
             <button class="card-action-btn ${activeTeamKey === 'A' ? 'btn-draft-a' : 'btn-draft-b'}" 
                     ${isDrafted || isDraftFinished ? 'disabled' : ''} 
                     id="btn-draft-${player.id}">
-                ${isDrafted ? 'Drafted' : `Draft for Team ${activeTeamKey}`}
+                ${isDrafted ? 'Drafted' : `Draft for ${currentGameData?.teams[activeTeamKey]?.name || 'Team ' + activeTeamKey}`}
             </button>
         `;
 
@@ -582,6 +582,7 @@ async function quickStartDemoMatch() {
 window.openHowToPlayModal = function() {
     const m = document.getElementById("modal-how-to-play");
     if (m) {
+        m.classList.add("active");
         m.style.display = "flex";
         document.body.style.overflow = "hidden";
     }
@@ -590,6 +591,7 @@ window.openHowToPlayModal = function() {
 window.closeHowToPlayModal = function() {
     const m = document.getElementById("modal-how-to-play");
     if (m) {
+        m.classList.remove("active");
         m.style.display = "none";
         document.body.style.overflow = "";
     }

@@ -934,6 +934,7 @@
         function openHowToPlayModal() {
             const m = document.getElementById("modal-how-to-play");
             if (m) {
+                m.classList.add("active");
                 m.style.display = "flex";
                 document.body.style.overflow = "hidden";
             }
@@ -942,6 +943,7 @@
         function closeHowToPlayModal() {
             const m = document.getElementById("modal-how-to-play");
             if (m) {
+                m.classList.remove("active");
                 m.style.display = "none";
                 document.body.style.overflow = "";
             }
