@@ -579,7 +579,7 @@ async function quickStartDemoMatch() {
 }
 
 // Global modal triggers for How To Play
-window.openHowToPlayModal = function() {
+window.openHowToPlayModal = function () {
     const m = document.getElementById("modal-how-to-play");
     if (m) {
         m.classList.add("active");
@@ -588,7 +588,7 @@ window.openHowToPlayModal = function() {
     }
 };
 
-window.closeHowToPlayModal = function() {
+window.closeHowToPlayModal = function () {
     const m = document.getElementById("modal-how-to-play");
     if (m) {
         m.classList.remove("active");
